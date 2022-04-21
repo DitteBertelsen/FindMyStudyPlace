@@ -1,5 +1,6 @@
 package dk.au.mad22spring.appproject.group7;
 
+import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
