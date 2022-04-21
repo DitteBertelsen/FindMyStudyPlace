@@ -16,15 +16,11 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
-    private StorageReference storageRef;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         FirebaseApp.initializeApp(this);
-
-        storageRef = FirebaseStorage.getInstance().getReference();
     }
 
 
