@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "186758091724",
+    "project_id": "findmystudyplace",
+    "storage_bucket": "findmystudyplace.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:186758091724:android:7674944f961cb0f9a84369",
+        "android_client_info": {
+          "package_name": "dk.au.mad22spring.appproject.group7"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "186758091724-7po3homcmc59gtuo8vi8i7apqkt0m59h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZZ3ldRJIX1l4Cf3P97Bx7nOvVilAH6IA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "186758091724-7po3homcmc59gtuo8vi8i7apqkt0m59h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
