@@ -1,3 +1,22 @@
 <resources>
+    //Study place list item:
     <string name="app_name">Find my study place</string>
+    <string name="title">Place Title</string>
+    <string name="type">Place Type</string>
+    <string name="location">Place Location</string>
+    <string name="rating">0.0</string>
+
+    //Main:
+    <string name="logIn">Log In</string>
+    
+    //Overview:
+    <string name="logOut">Log Out</string>
+    <string name="findStudyPlace">Find Study Place</string>
+    <string name="single">Single</string>
+    <string name="map">Map</string>
+    <string name="list">List</string>
+    <string name="sortBy">Sort By</string>
+    <string name="shareLocation">Share Location</string>
+    
+
 </resources>

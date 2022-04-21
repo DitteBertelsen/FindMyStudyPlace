@@ -14,13 +14,22 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.IOException;
 
+import dk.au.mad22spring.appproject.group7.Fragments.StudyPlaceListFragment;
+
+
 public class MainActivity extends AppCompatActivity {
+
+    private StorageReference storageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         FirebaseApp.initializeApp(this);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragList, StudyPlaceListFragment.newInstance())
+                .commitNow();
     }
 
 
