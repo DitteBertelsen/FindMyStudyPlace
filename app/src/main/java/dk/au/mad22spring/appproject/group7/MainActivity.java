@@ -2,6 +2,7 @@ package dk.au.mad22spring.appproject.group7;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,14 +19,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import dk.au.mad22spring.appproject.group7.Fragments.StudyPlaceListFragment;
+import dk.au.mad22spring.appproject.group7.Fragments.StudyPlaceListViewModel;
 import dk.au.mad22spring.appproject.group7.models.StudyPlace;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG_MAIN = "Main";
 
     private Repository repository;
     private LiveData<ArrayList<StudyPlace>> studyPlaces;
+    private StudyPlaceListViewModel studyPlaceListViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
         repository = Repository.getInstance();
 
-        studyPlaces = repository.getAllStudyPlaces();
-
-        Log.d(TAG_MAIN, "onCreate: " + studyPlaces.getValue().size());
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragList, StudyPlaceListFragment.newInstance())
-                .commitNow();
     }
 
 
