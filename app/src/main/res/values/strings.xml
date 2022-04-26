@@ -11,7 +11,13 @@
     <string name="email">E-mail</string>
     <string name="password">Password</string>
     <string name="createnewuser">Create new user</string>
-    
+    <string name="txtloggedIn"> logged in</string>
+    <string name="txtloggedOut">User logged out</string>
+    <string name="errorInvalidEmail">Please enter valid email-address</string>
+    <string name="errorInvalidPw">Password must contain at least 8 creators</string>
+    <string name="userCreated">User created</string>
+    <string name="errorUserCreatation">Failed to create user</string>
+
     //Overview:
     <string name="logOut">Log Out</string>
     <string name="findStudyPlace">Find Study Place</string>
