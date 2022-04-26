@@ -8,6 +8,9 @@
 
     //Main:
     <string name="logIn">Log In</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="createnewuser">Create new user</string>
     
     //Overview:
     <string name="logOut">Log Out</string>

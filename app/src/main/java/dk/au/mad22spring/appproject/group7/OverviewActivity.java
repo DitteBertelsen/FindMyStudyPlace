@@ -23,10 +23,6 @@ public class OverviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
 
-        studyPlaceListViewModel = new ViewModelProvider(this).get(StudyPlaceListViewModel.class);
-
-
-        Log.d(Constants.TAG_Overview, "onCreate: " + studyPlaces.getValue().size());
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragList, StudyPlaceListFragment.newInstance())
