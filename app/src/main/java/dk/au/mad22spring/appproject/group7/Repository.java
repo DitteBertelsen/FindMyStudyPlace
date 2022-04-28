@@ -30,6 +30,7 @@ public class Repository {
     private static Repository instance;
 
     private CloudStorage cloudStorage;
+    private FirebaseConnection firebaseConnection;
 
     public static Repository getInstance()
     {
@@ -41,12 +42,21 @@ public class Repository {
 
     public Repository() {
         cloudStorage = CloudStorage.getInstance();
+        firebaseConnection = FirebaseConnection.getInstance();
     }
 
 
     public LiveData<ArrayList<StudyPlace>> getAllStudyPlaces()
     {
         return cloudStorage.getStudyPlaceListItems();
+    }
+
+    public String getCurrentUser() {
+        return firebaseConnection.getCurrentUser();
+    }
+
+    public Boolean isSignedIn() {
+        return firebaseConnection.isSignedIn();
     }
 
 }

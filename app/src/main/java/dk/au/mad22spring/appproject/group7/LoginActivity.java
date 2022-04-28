@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -30,18 +31,21 @@ import java.util.List;
 
 import dk.au.mad22spring.appproject.group7.Fragments.StudyPlaceListViewModel;
 import dk.au.mad22spring.appproject.group7.models.StudyPlace;
+import dk.au.mad22spring.appproject.group7.viewModels.LoginViewModel;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     EditText edtEmailAddress, edtPassword;
     Button btnCreateNewUser, btnLogIn;
 
     ActivityResultLauncher<Intent> signInLauncher, overviewLauncher;
-    FirebaseAuth auth;
-    private Repository repository;
-    private LiveData<ArrayList<StudyPlace>> studyPlaces;
-    private StudyPlaceListViewModel studyPlaceListViewModel;
 
+
+    private Repository repository;
+    private LoginViewModel loginViewModel;
+
+    //TODO fjern firebase connection
+    FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,15 +55,21 @@ public class MainActivity extends AppCompatActivity {
 
         repository = Repository.getInstance();
 
+        //TODO fjern firebase connection
         if(auth == null) {
             auth = FirebaseAuth.getInstance();
         }
 
         setupUI();
 
+        //Setup ViewModel
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+
+
+
         signInLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result ->  {
             if (result.getResultCode() == Activity.RESULT_OK) {
-                String uEmail = auth.getCurrentUser().getEmail();
+                String uEmail = loginViewModel.getCurrentUser();
                 Toast.makeText(this, uEmail + R.string.txtloggedIn, Toast.LENGTH_SHORT).show();
                 SignIn();
             }
@@ -131,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void SignIn() {
-        if(auth.getCurrentUser() != null) {
+        if(loginViewModel.isSignedIn()) {
             goToOverview();
         }
         else {
@@ -149,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
     private void goToOverview() {
         Intent intent = new Intent(this, OverviewActivity.class);
 
-        String strEmail = auth.getCurrentUser().getEmail();
+        String strEmail = loginViewModel.getCurrentUser();
         String[] arrayEmail = strEmail.split("@",2);
         intent.putExtra(Constants.USER_NAME, arrayEmail[0]);
 
