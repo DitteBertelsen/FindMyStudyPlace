@@ -27,6 +27,8 @@
     <string name="sortBy">Sort By</string>
     <string name="shareLocation">Share Location</string>
     <string name="txtWelcome">Welcome </string>
-    
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>
