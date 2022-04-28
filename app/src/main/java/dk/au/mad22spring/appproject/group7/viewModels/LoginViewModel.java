@@ -1,9 +1,11 @@
 package dk.au.mad22spring.appproject.group7.viewModels;
 
+import android.app.Activity;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
 
 import dk.au.mad22spring.appproject.group7.Repository;
 
@@ -22,6 +24,16 @@ public class LoginViewModel extends AndroidViewModel {
 
     public Boolean isSignedIn() {
         return repository.isSignedIn();
+    }
+
+    //Returns true if a new user i successfully created
+    public MutableLiveData<Boolean> getUserCreatedResult() {
+        return repository.getUserCreatedResult();
+    }
+
+    //Calls all the way to Firebase Connection and tries to create a new user
+    public void createNewUser(String email, String password, Activity activity) {
+        repository.createNewUser(email, password, activity);
     }
 
 }

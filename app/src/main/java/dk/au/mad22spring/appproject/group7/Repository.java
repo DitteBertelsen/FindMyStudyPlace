@@ -1,5 +1,6 @@
 package dk.au.mad22spring.appproject.group7;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
@@ -21,6 +22,7 @@ import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import dk.au.mad22spring.appproject.group7.models.StudyPlace;
 import dk.au.mad22spring.appproject.group7.models.StudyPlaceList;
@@ -57,6 +59,20 @@ public class Repository {
 
     public Boolean isSignedIn() {
         return firebaseConnection.isSignedIn();
+    }
+
+    //Returns true if a new user i successfully created
+    public MutableLiveData<Boolean> getUserCreatedResult() {
+        return firebaseConnection.getUserCreatedResult();
+    }
+
+    //Calls Firebase Connection and tries to create a new user
+    public void createNewUser(String email, String password, Activity activity) {
+        firebaseConnection.createNewUser(email, password, activity);
+    }
+
+    public LiveData<List<StudyPlace>> getStudyPlacesRealTimeDb() {
+        return firebaseConnection.getStudyPlacesRealTimeDb();
     }
 
 }

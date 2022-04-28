@@ -7,6 +7,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
@@ -40,12 +42,10 @@ public class LoginActivity extends AppCompatActivity {
 
     ActivityResultLauncher<Intent> signInLauncher, overviewLauncher;
 
+    private Boolean isUserCreated = false;
 
     private Repository repository;
     private LoginViewModel loginViewModel;
-
-    //TODO fjern firebase connection
-    FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,16 +55,19 @@ public class LoginActivity extends AppCompatActivity {
 
         repository = Repository.getInstance();
 
-        //TODO fjern firebase connection
-        if(auth == null) {
-            auth = FirebaseAuth.getInstance();
-        }
 
         setupUI();
 
         //Setup ViewModel
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
+        //Listens on isUserCreated
+        loginViewModel.getUserCreatedResult().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                isUserCreated = aBoolean;
+            }
+        });
 
 
         signInLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result ->  {
@@ -121,22 +124,14 @@ public class LoginActivity extends AppCompatActivity {
                 edtPassword.setError("" + R.string.errorInvalidPw);
             }
         }
-        auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+        loginViewModel.createNewUser(email, password,this);
 
-                        if (task.isSuccessful()) {
-                            Log.d(Constants.TAG_MAIN, "onComplete: Created User");
-                            Toast.makeText(FMSPApplication.getAppContext(), R.string.userCreated, Toast.LENGTH_SHORT).show();
-                            SignIn();
-                        } else {
-                            Log.d(Constants.TAG_MAIN, "onComplete: Failed to create user", task.getException());
-                            Toast.makeText(FMSPApplication.getAppContext(), R.string.errorUserCreatation, Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
+        if (isUserCreated) {
+            Toast.makeText(FMSPApplication.getAppContext(), R.string.userCreated, Toast.LENGTH_SHORT).show();
+            SignIn();
+        } else {
+            Toast.makeText(FMSPApplication.getAppContext(), R.string.errorUserCreatation, Toast.LENGTH_SHORT).show();
+        }
 
     }
 
