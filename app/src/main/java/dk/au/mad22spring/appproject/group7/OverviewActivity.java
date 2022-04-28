@@ -51,6 +51,7 @@ public class OverviewActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(StudyPlaceListViewModel.class);
 
         //Apply default fragment
+
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragList, StudyPlaceListFragment.newInstance())
                 .commitNow();

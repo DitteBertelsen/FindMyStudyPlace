@@ -56,11 +56,15 @@ public class CloudStorage {
         tempstudy1.setTitle("Nygaard, Kælder");
         tempstudy1.setType(StudyPlaceType.Single);
         tempstudy1.setUserRating(4.0);
+        tempstudy1.setStudyPlaceLat(56.17186630246226);
+        tempstudy1.setStudyPlaceLong(10.19044975947223);
 
         StudyPlace tempstudy2 = new StudyPlace();
         tempstudy2.setTitle("Nygaard, 1. sal");
         tempstudy2.setType(StudyPlaceType.Group);
         tempstudy2.setUserRating(9.9);
+        tempstudy2.setStudyPlaceLat(56.17270526308221);
+        tempstudy2.setStudyPlaceLong(10.190984373182822);
 
         temp.add(tempstudy1);
         temp.add(tempstudy2);
