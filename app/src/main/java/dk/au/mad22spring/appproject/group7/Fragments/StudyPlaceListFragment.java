@@ -31,7 +31,7 @@ public class StudyPlaceListFragment extends Fragment implements StudyPlaceListVi
     private RecyclerView.LayoutManager layoutMan;
 
     //Define other objects
-    private LiveData<ArrayList<StudyPlace>> studyPlaces;
+    private ArrayList<StudyPlace> studyPlaces;
     private StudyPlaceListViewModel viewModel;
 
     public static StudyPlaceListFragment newInstance() {
@@ -58,10 +58,10 @@ public class StudyPlaceListFragment extends Fragment implements StudyPlaceListVi
         rcvStudyPlaceView.setLayoutManager(layoutMan);
 
         viewModel = new ViewModelProvider(getActivity()).get(StudyPlaceListViewModel.class);
-        studyPlaces = viewModel.getStudyPlaces();
-        studyPlaces.observe(this.getViewLifecycleOwner(), new Observer<ArrayList<StudyPlace>>() {
+        viewModel.getStudyPlaces().observe(this.getViewLifecycleOwner(), new Observer<ArrayList<StudyPlace>>() {
             @Override
             public void onChanged(ArrayList<StudyPlace> counterItems) {
+                studyPlaces = counterItems;
                 adapter.updateStudyPlaces(counterItems);
             }
         });

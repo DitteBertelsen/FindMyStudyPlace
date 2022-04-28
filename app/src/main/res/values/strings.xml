@@ -26,6 +26,7 @@
     <string name="list">List</string>
     <string name="sortBy">Sort By</string>
     <string name="shareLocation">Share Location</string>
+    <string name="txtWelcome">Welcome </string>
     
 
 </resources>

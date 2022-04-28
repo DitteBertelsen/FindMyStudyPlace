@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -20,6 +22,8 @@ public class OverviewActivity extends AppCompatActivity {
     //Setup UI
     Button btnLogOut;
 
+    private String userName;
+
     private LiveData<ArrayList<StudyPlace>> studyPlaces;
     private StudyPlaceListViewModel studyPlaceListViewModel;
 
@@ -27,6 +31,9 @@ public class OverviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
+
+        Intent intent = getIntent();
+        userName = intent.getStringExtra(Constants.USER_NAME);
 
 
         getSupportFragmentManager().beginTransaction()
@@ -42,5 +49,6 @@ public class OverviewActivity extends AppCompatActivity {
             }
         });
 
+        Toast.makeText(this, R.string.txtWelcome + userName, Toast.LENGTH_LONG);
     }
 }

@@ -25,6 +25,7 @@ public class StudyPlaceListViewAdaptor extends RecyclerView.Adapter<StudyPlaceLi
 
     public StudyPlaceListViewAdaptor(IStudyPlaceClickedListener listner){
         studyPlaceClickListener = listner;
+        studyplaces = new ArrayList<>();
     }
 
     public void updateStudyPlaces(ArrayList<StudyPlace> itemLists){
@@ -36,14 +37,18 @@ public class StudyPlaceListViewAdaptor extends RecyclerView.Adapter<StudyPlaceLi
     @Override
     public StudyPlaceItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.study_place_list_fragment, parent, false);
-        StudyPlaceItemViewHolder vh = new StudyPlaceItemViewHolder(v, studyPlaceClickListener);
-        return vh;
+                .inflate(R.layout.study_place_list_item, parent, false);
+
+        return new StudyPlaceItemViewHolder(v, studyPlaceClickListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull StudyPlaceItemViewHolder holder, int position) {
+        //Todo add image, position
 
+        holder.txtTitle.setText(studyplaces.get(position).getTitle());
+        holder.txtType.setText(studyplaces.get(position).getType().toString());
+        holder.txtRating.setText(studyplaces.get(position).getUserRating().toString());
     }
 
     @Override
@@ -63,15 +68,17 @@ public class StudyPlaceListViewAdaptor extends RecyclerView.Adapter<StudyPlaceLi
         TextView txtLocation;
         TextView txtRating;
 
-        IStudyPlaceClickedListener list;
+        private IStudyPlaceClickedListener list;
 
         public StudyPlaceItemViewHolder(@NonNull View itemView, IStudyPlaceClickedListener listener) {
             super(itemView);
+            list = listener;
             imgIcon = itemView.findViewById(R.id.imgstudyplaceimage);
+            txtTitle = itemView.findViewById(R.id.txtTitle);
             txtType = itemView.findViewById(R.id.txtType);
             txtLocation = itemView.findViewById(R.id.txtLocation);
             txtRating = itemView.findViewById(R.id.txtRating);
-            list = listener;
+
             itemView.setOnClickListener(this);
         }
 

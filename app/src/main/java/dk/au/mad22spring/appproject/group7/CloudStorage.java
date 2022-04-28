@@ -50,7 +50,24 @@ public class CloudStorage {
             mStudyPlaceList.setValue(new ArrayList<>());
         }
 
-        sendRequest("gs://findmystudyplace.appspot.com");
+        //Todo remove temp. data
+        ArrayList<StudyPlace> temp = new ArrayList<>();
+        StudyPlace tempstudy1 = new StudyPlace();
+        tempstudy1.setTitle("Nygaard, Kælder");
+        tempstudy1.setType(StudyPlaceType.Single);
+        tempstudy1.setUserRating(4.0);
+
+        StudyPlace tempstudy2 = new StudyPlace();
+        tempstudy2.setTitle("Nygaard, 1. sal");
+        tempstudy2.setType(StudyPlaceType.Group);
+        tempstudy2.setUserRating(9.9);
+
+        temp.add(tempstudy1);
+        temp.add(tempstudy2);
+
+        mStudyPlaceList.postValue(temp);
+
+        //sendRequest("gs://findmystudyplace.appspot.com");
 
         return mStudyPlaceList;
     }
