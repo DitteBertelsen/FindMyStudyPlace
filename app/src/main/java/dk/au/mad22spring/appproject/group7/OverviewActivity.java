@@ -23,6 +23,9 @@ public class OverviewActivity extends AppCompatActivity {
     //Setup UI
     Button btnLogOut;
     Button btnMap;
+    Button btnList;
+    Switch swtSingle;
+
 
     private String userName;
 
@@ -42,6 +45,13 @@ public class OverviewActivity extends AppCompatActivity {
                 .replace(R.id.fragList, StudyPlaceListFragment.newInstance())
                 .commitNow();
 
+        setUpUI();
+
+
+
+    }
+
+    private void setUpUI() {
         btnLogOut = findViewById(R.id.btnLogOut);
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,13 +65,36 @@ public class OverviewActivity extends AppCompatActivity {
         btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Initialize fragment ref: https://www.geeksforgeeks.org/how-to-implement-google-map-inside-fragment-in-android/
+                // Initialize fragment
                 Fragment mapFragment=new MapFragment();
 
                 // Open fragment
                 getSupportFragmentManager()
                         .beginTransaction().replace(R.id.fragList,mapFragment)
                         .commit();
+            }
+        });
+
+        btnList = findViewById(R.id.btnList);
+        btnList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragList, StudyPlaceListFragment.newInstance())
+                        .commitNow();
+            }
+        });
+
+        swtSingle = findViewById(R.id.swtSingle);
+        swtSingle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b){
+                    //remove all group places
+                }
+                else {
+                    //add all group places
+                }
             }
         });
 
