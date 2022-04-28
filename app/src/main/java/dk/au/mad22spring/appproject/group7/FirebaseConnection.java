@@ -130,7 +130,6 @@ public class FirebaseConnection {
                 if(studyPlaces.size()>0) {
                     getStudyPlacesRealTimeDb().postValue(studyPlaces);
                 }
-
             }
 
             @Override
@@ -152,5 +151,6 @@ public class FirebaseConnection {
             Log.e("DATA", "onStudyPlaceRatingChanged: Error updating user rating", ex);
         }
     }
+
 
 }
