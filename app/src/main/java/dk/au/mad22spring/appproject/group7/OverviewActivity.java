@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -23,7 +25,8 @@ public class OverviewActivity extends AppCompatActivity {
     //Setup UI
     Button btnLogOut;
     Button btnMap;
-
+    Button btnList;
+    Switch swtSingle;
 
 
     private String userName;
@@ -39,11 +42,18 @@ public class OverviewActivity extends AppCompatActivity {
         Intent intent = getIntent();
         userName = intent.getStringExtra(Constants.USER_NAME);
 
-
+        //Apply default fragment
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragList, StudyPlaceListFragment.newInstance())
                 .commitNow();
 
+        setUpUI();
+
+
+
+    }
+
+    private void setUpUI() {
         btnLogOut = findViewById(R.id.btnLogOut);
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +74,29 @@ public class OverviewActivity extends AppCompatActivity {
                 getSupportFragmentManager()
                         .beginTransaction().replace(R.id.fragList,mapFragment)
                         .commit();
+            }
+        });
+
+        btnList = findViewById(R.id.btnList);
+        btnList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragList, StudyPlaceListFragment.newInstance())
+                        .commitNow();
+            }
+        });
+
+        swtSingle = findViewById(R.id.swtSingle);
+        swtSingle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b){
+                    //remove all group places
+                }
+                else {
+                    //add all group places
+                }
             }
         });
 
