@@ -1,6 +1,7 @@
 package dk.au.mad22spring.appproject.group7;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -21,6 +22,9 @@ public class OverviewActivity extends AppCompatActivity {
 
     //Setup UI
     Button btnLogOut;
+    Button btnMap;
+
+
 
     private String userName;
 
@@ -46,6 +50,20 @@ public class OverviewActivity extends AppCompatActivity {
             public void onClick(View view) {
                 setResult(RESULT_OK);
                 finish();
+            }
+        });
+
+        btnMap=findViewById(R.id.btnMap);
+        btnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Initialize fragment
+                Fragment mapFragment=new MapFragment();
+
+                // Open fragment
+                getSupportFragmentManager()
+                        .beginTransaction().replace(R.id.fragList,mapFragment)
+                        .commit();
             }
         });
 
