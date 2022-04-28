@@ -1,5 +1,7 @@
 package dk.au.mad22spring.appproject.group7;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -26,6 +28,7 @@ public class OverviewActivity extends AppCompatActivity {
     Button btnLogOut;
     Button btnMap;
     Button btnList;
+    Button btnShareLocation;
     Switch swtSingle;
 
 
@@ -33,6 +36,9 @@ public class OverviewActivity extends AppCompatActivity {
 
     private LiveData<ArrayList<StudyPlace>> studyPlaces;
     private StudyPlaceListViewModel studyPlaceListViewModel;
+    private StudyPlaceListViewModel viewModel;
+
+    private ActivityResultLauncher<Intent> shareLocationLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +48,18 @@ public class OverviewActivity extends AppCompatActivity {
         Intent intent = getIntent();
         userName = intent.getStringExtra(Constants.USER_NAME);
 
+        viewModel = new ViewModelProvider(this).get(StudyPlaceListViewModel.class);
+
         //Apply default fragment
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragList, StudyPlaceListFragment.newInstance())
                 .commitNow();
+
+        shareLocationLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if(result.getResultCode() == RESULT_OK){
+                Toast.makeText(this, R.string.txtSharedLocation, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         setUpUI();
 
@@ -87,15 +101,26 @@ public class OverviewActivity extends AppCompatActivity {
             }
         });
 
+        btnShareLocation = findViewById(R.id.btnOverShareLocation);
+        btnShareLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(FMSPApplication.getAppContext(), ShareLocationActivity.class);
+                shareLocationLauncher.launch(i);
+            }
+        });
+
         swtSingle = findViewById(R.id.swtSingle);
         swtSingle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b){
                     //remove all group places
+                    viewModel.removeGroupPlaces();
                 }
                 else {
                     //add all group places
+                    viewModel.addGroupPlaces();
                 }
             }
         });

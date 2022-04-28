@@ -30,5 +30,18 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    //Share location:
+    <string name="ShareLocation">Share Location</string>
+    <string name="Back">Back</string>
+    <string name="FriendsEmail">Friends Email</string>
+    <string name="Add">Add</string>
+    <string name="AddFriends">Add Friends:</string>
+    <string name="AddedFriends">Added friends:</string>
+    <string name="AddComment">Add Comment:</string>
+    <string name="Comments">Comments</string>
+    <string name="txtFriendDoesNotExist">Friend Does Not Exist...</string>
+    <string name="txtSharedLocation">Location shared with friends</string>
+
+
 
 </resources>

@@ -46,7 +46,7 @@ public class Repository {
     }
 
 
-    public LiveData<ArrayList<StudyPlace>> getAllStudyPlaces()
+    public MutableLiveData<ArrayList<StudyPlace>> getAllStudyPlaces()
     {
         return cloudStorage.getStudyPlaceListItems();
     }

@@ -86,10 +86,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.85" />
+        app:layout_constraintGuide_percent="0.8508892" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/btnOverShareLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/shareLocation"
