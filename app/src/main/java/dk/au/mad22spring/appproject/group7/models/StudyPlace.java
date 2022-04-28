@@ -17,7 +17,13 @@ public class StudyPlace {
     @Expose
     private String Title;
 
-    //TODO add location coordinates
+    @SerializedName("StudyPlaceLat")
+    @Expose
+    private double StudyPlaceLat;
+
+    @SerializedName("StudyPlaceLong")
+    @Expose
+    private double StudyPlaceLong;
 
     //TODO Find ud af hvordan vi får hentet billder og hvor de skal ligge
     //private int picture
@@ -72,5 +78,21 @@ public class StudyPlace {
 
     public void setUserRating(Double userRating) {
         UserRating = userRating;
+    }
+
+    public double getStudyPlaceLat() {
+        return StudyPlaceLat;
+    }
+
+    public void setStudyPlaceLat(double studyPlaceLat) {
+        StudyPlaceLat = studyPlaceLat;
+    }
+
+    public double getStudyPlaceLong() {
+        return StudyPlaceLong;
+    }
+
+    public void setStudyPlaceLong(double studyPlaceLong) {
+        StudyPlaceLong = studyPlaceLong;
     }
 }

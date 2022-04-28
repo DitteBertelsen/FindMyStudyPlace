@@ -1,5 +1,7 @@
 package dk.au.mad22spring.appproject.group7;
 
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,8 +19,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import dk.au.mad22spring.appproject.group7.R;
-
+//ref: https://www.geeksforgeeks.org/how-to-implement-google-map-inside-fragment-in-android/
 public class MapFragment extends Fragment {
+    private boolean isTracking = false;
+    private LocationManager locationManager;
+    private Location userLocation;
+    private double userLatitude;
+    private double userLongitude;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,6 +58,8 @@ public class MapFragment extends Fragment {
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
                         // Add marker on map
                         googleMap.addMarker(markerOptions);
+                        googleMap.addMarker(new MarkerOptions().position(new LatLng(userLatitude, userLongitude)).title("You are here!"));
+
                     }
                 });
             }

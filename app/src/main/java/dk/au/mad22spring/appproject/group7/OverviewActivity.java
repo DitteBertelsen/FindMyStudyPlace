@@ -24,8 +24,6 @@ public class OverviewActivity extends AppCompatActivity {
     Button btnLogOut;
     Button btnMap;
 
-
-
     private String userName;
 
     private LiveData<ArrayList<StudyPlace>> studyPlaces;
@@ -57,7 +55,7 @@ public class OverviewActivity extends AppCompatActivity {
         btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Initialize fragment
+                // Initialize fragment ref: https://www.geeksforgeeks.org/how-to-implement-google-map-inside-fragment-in-android/
                 Fragment mapFragment=new MapFragment();
 
                 // Open fragment
