@@ -62,9 +62,9 @@ public class StudyPlaceListFragment extends Fragment implements StudyPlaceListVi
         viewModel = new ViewModelProvider(getActivity()).get(StudyPlaceListViewModel.class);
         viewModel.getStudyPlaces().observe(this.getViewLifecycleOwner(), new Observer<ArrayList<StudyPlace>>() {
             @Override
-            public void onChanged(ArrayList<StudyPlace> counterItems) {
-                studyPlaces = counterItems;
-                adapter.updateStudyPlaces(counterItems);
+            public void onChanged(ArrayList<StudyPlace> items) {
+                studyPlaces = items;
+                adapter.updateStudyPlaces(items);
             }
         });
     }

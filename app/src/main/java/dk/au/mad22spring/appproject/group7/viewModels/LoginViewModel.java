@@ -22,8 +22,11 @@ public class LoginViewModel extends AndroidViewModel {
         return repository.getCurrentUser();
     }
 
-    public Boolean isSignedIn() {
+    public MutableLiveData<Boolean> isSignedIn() {
         return repository.isSignedIn();
+    }
+    public void SignIn(String email, String password, Activity activity){
+        repository.SignIn(email,password,activity);
     }
 
     //Returns true if a new user i successfully created

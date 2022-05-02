@@ -42,4 +42,8 @@ public class StudyPlaceListViewModel extends ViewModel {
     public void addGroupPlaces() {
         studyPlaces = repository.getAllStudyPlaces();
     }
+
+    public void LogOut() {
+        repository.LogOut();
+    }
 }

@@ -57,8 +57,12 @@ public class Repository {
         return firebaseConnection.getCurrentUser();
     }
 
-    public Boolean isSignedIn() {
+    public MutableLiveData<Boolean> isSignedIn() {
         return firebaseConnection.isSignedIn();
+    }
+
+    public void SignIn(String email, String password, Activity activity){
+        firebaseConnection.SignIn(email,password,activity);
     }
 
     //Returns true if a new user i successfully created
@@ -73,6 +77,10 @@ public class Repository {
 
     public LiveData<List<StudyPlace>> getStudyPlacesRealTimeDb() {
         return firebaseConnection.getStudyPlacesRealTimeDb();
+    }
+
+    public void LogOut(){
+        firebaseConnection.LogOut();
     }
 
 }

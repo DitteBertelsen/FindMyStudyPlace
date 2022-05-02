@@ -54,6 +54,7 @@ public class ShareLocationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String email = edtFriendEmail.getText().toString();
+                edtFriendEmail.setText("");
 
                 //TODO Check if email exist in db:
 

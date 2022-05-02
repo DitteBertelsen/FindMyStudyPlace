@@ -29,6 +29,7 @@ public class FirebaseConnection {
     private static FirebaseConnection instance;
 
     private MutableLiveData<Boolean> isUserCreated;
+    private MutableLiveData<Boolean> isUserSignedIn;
 
     //Upset database
     private ArrayList<StudyPlace> studyPlaces;
@@ -52,23 +53,38 @@ public class FirebaseConnection {
         }
 
         studyPlaces = new ArrayList<>();
-
-        setupFirebaseListener();
     }
 
     public String getCurrentUser() {
         String userEmail = auth.getCurrentUser().getEmail();
 
+        if (userEmail != "")
+            setupFirebaseListener();
+
         return userEmail;
     }
 
-    public Boolean isSignedIn() {
-        if(auth.getCurrentUser() == null)
-        {
-            return false;
-        } else {
-            return true;
+    public void SignIn(String email, String password, Activity activity){
+        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()){
+                    Log.d(Constants.TAG_MAIN, "onComplete: User signed in");
+                    isUserSignedIn.postValue(true);
+                }
+                else {
+                    Log.d(Constants.TAG_MAIN, "onComplete: Failed to sign user in");
+                    isUserSignedIn.postValue(false);
+                }
+            }
+        });
+    }
+
+    public MutableLiveData<Boolean> isSignedIn() {
+        if (isUserSignedIn == null){
+            isUserSignedIn = new MutableLiveData<>();
         }
+        return isUserSignedIn;
     }
 
     public MutableLiveData<Boolean> getUserCreatedResult()
@@ -150,6 +166,10 @@ public class FirebaseConnection {
         } catch (Exception ex) {
             Log.e("DATA", "onStudyPlaceRatingChanged: Error updating user rating", ex);
         }
+    }
+
+    public void LogOut(){
+        auth.signOut();
     }
 
 

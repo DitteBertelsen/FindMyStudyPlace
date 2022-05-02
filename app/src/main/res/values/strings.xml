@@ -17,6 +17,7 @@
     <string name="errorInvalidPw">Password must contain at least 8 creators</string>
     <string name="userCreated">User created</string>
     <string name="errorUserCreatation">Failed to create user</string>
+    <string name="errorUserSignIn">Incorrect email and/or password</string>
 
     //Overview:
     <string name="logOut">Log Out</string>

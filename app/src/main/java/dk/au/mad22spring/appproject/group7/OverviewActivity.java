@@ -59,7 +59,6 @@ public class OverviewActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(StudyPlaceListViewModel.class);
 
         //Apply default fragment
-
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragList, StudyPlaceListFragment.newInstance())
                 .commitNow();
@@ -81,6 +80,7 @@ public class OverviewActivity extends AppCompatActivity {
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                viewModel.LogOut();
                 setResult(RESULT_OK);
                 finish();
             }
@@ -120,6 +120,8 @@ public class OverviewActivity extends AppCompatActivity {
         });
 
         swtSingle = findViewById(R.id.swtSingle);
+
+        //This method is inspired by: https://www.youtube.com/watch?v=EH0ixNRoS8g
         swtSingle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

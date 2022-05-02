@@ -12,12 +12,15 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -39,12 +42,12 @@ public class LoginActivity extends AppCompatActivity {
 
     EditText edtEmailAddress, edtPassword;
     Button btnCreateNewUser, btnLogIn;
+    ProgressBar prgbLogin;
 
     ActivityResultLauncher<Intent> signInLauncher, overviewLauncher;
 
     private Boolean isUserCreated = false;
 
-    private Repository repository;
     private LoginViewModel loginViewModel;
 
     @Override
@@ -53,22 +56,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         FirebaseApp.initializeApp(this);
 
-        repository = Repository.getInstance();
-
-
-        setupUI();
-
         //Setup ViewModel
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-
-        //Listens on isUserCreated
-        loginViewModel.getUserCreatedResult().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                isUserCreated = aBoolean;
-            }
-        });
-
 
         signInLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result ->  {
             if (result.getResultCode() == Activity.RESULT_OK) {
@@ -80,24 +69,66 @@ public class LoginActivity extends AppCompatActivity {
 
         overviewLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if(result.getResultCode() == RESULT_OK) {
+                            Toast.makeText(FMSPApplication.getAppContext(), R.string.txtloggedOut, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+        //Listens on isUserCreated
+        loginViewModel.getUserCreatedResult().observe(this, new Observer<Boolean>() {
             @Override
-            public void onActivityResult(ActivityResult result) {
-                if(result.getResultCode() == RESULT_OK) {
-                    Toast.makeText(FMSPApplication.getAppContext(), R.string.txtloggedOut, Toast.LENGTH_SHORT).show();
+            public void onChanged(Boolean aBoolean) {
+                isUserCreated = aBoolean;
+                prgbLogin.setVisibility(View.GONE);
+
+                if (isUserCreated) {
+                    Toast.makeText(FMSPApplication.getAppContext(), R.string.userCreated, Toast.LENGTH_SHORT).show();
+                    SignIn();
+                } else {
+                    Toast.makeText(FMSPApplication.getAppContext(), R.string.errorUserCreatation, Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
+        loginViewModel.isSignedIn().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isSignedIn) {
+                prgbLogin.setVisibility(View.GONE);
+                if (isSignedIn){
+                    goToOverview();
+                }
+                else {
+                    Toast.makeText(FMSPApplication.getAppContext(), R.string.errorUserSignIn, Toast.LENGTH_SHORT);
+                    edtEmailAddress.setError(getString(R.string.errorUserSignIn));
+                    edtPassword.setError(getString(R.string.errorUserSignIn));
+                }
+            }
+        });
+
+        setupUI();
     }
 
     private void setupUI() {
         edtEmailAddress = findViewById(R.id.edtEmailAddress);
         edtPassword = findViewById(R.id.edtPassword);
 
+        //This widget is inspired by: https://www.tutorialspoint.com/android/android_loading_spinner.htm
+        prgbLogin = findViewById(R.id.prgbLogin);
+        prgbLogin.setVisibility(View.GONE);
+
         btnLogIn = findViewById(R.id.btnLogIn);
         btnLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                prgbLogin.setVisibility(View.VISIBLE);
+                edtEmailAddress.setError(null);
+                edtPassword.setError(null);
+                closeKeyboard();
+
+
                 SignIn();
             }
         });
@@ -106,55 +137,73 @@ public class LoginActivity extends AppCompatActivity {
         btnCreateNewUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                edtEmailAddress.setError(null);
+                edtPassword.setError(null);
+                prgbLogin.setVisibility(View.VISIBLE);
+                closeKeyboard();
+
                 createNewUser();
             }
         });
-
-
     }
 
     private void createNewUser() {
         String email = edtEmailAddress.getText().toString();
         String password = edtPassword.getText().toString();
 
+        //Validating email and password:
         if(email == null || email.length()<1 || !email.contains("@")) {
-            edtEmailAddress.setError("" + R.string.errorInvalidEmail);
-            if (password == null || password.length()< 8)
-            {
-                edtPassword.setError("" + R.string.errorInvalidPw);
-            }
+            edtEmailAddress.setError(getString(R.string.errorInvalidEmail));
+            prgbLogin.setVisibility(View.GONE);
         }
-        loginViewModel.createNewUser(email, password,this);
-
-        if (isUserCreated) {
-            Toast.makeText(FMSPApplication.getAppContext(), R.string.userCreated, Toast.LENGTH_SHORT).show();
-            SignIn();
-        } else {
-            Toast.makeText(FMSPApplication.getAppContext(), R.string.errorUserCreatation, Toast.LENGTH_SHORT).show();
+        if (password == null || password.length()< 8)
+        {
+            edtPassword.setError(getString(R.string.errorInvalidPw));
+            prgbLogin.setVisibility(View.GONE);
         }
-
+        else {
+            loginViewModel.createNewUser(email, password, this);
+        }
     }
 
     private void SignIn() {
-        if(loginViewModel.isSignedIn()) {
-            goToOverview();
+        String email = edtEmailAddress.getText().toString();
+        String password = edtPassword.getText().toString();
+
+        //Validating email and password:
+        if(email == null || email.length()<1 || !email.contains("@")) {
+            edtEmailAddress.setError(getString(R.string.errorInvalidEmail));
+            prgbLogin.setVisibility(View.GONE);
+        }
+        if (password == null || password.length()< 8)
+        {
+            edtPassword.setError(getString(R.string.errorInvalidPw));
+            prgbLogin.setVisibility(View.GONE);
         }
         else {
-            List<AuthUI.IdpConfig> providers = Arrays.asList(
-                    new AuthUI.IdpConfig.EmailBuilder().build());
-
-            signInLauncher.launch(AuthUI.getInstance()
-                    .createSignInIntentBuilder()
-                    .setAvailableProviders(providers)
-                    .build());
-
+            loginViewModel.SignIn(email,password,this);
         }
+
+        //TODO remove this part? (old log in logic)
+        /*List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.EmailBuilder().build());
+
+        signInLauncher.launch(AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .build());
+
+        goToOverview();*/
     }
+
+
 
     private void goToOverview() {
         Intent intent = new Intent(this, OverviewActivity.class);
 
         String strEmail = loginViewModel.getCurrentUser();
+
+        //Retrive user name:
         String[] arrayEmail = strEmail.split("@",2);
         intent.putExtra(Constants.USER_NAME, arrayEmail[0]);
 
@@ -162,5 +211,17 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    //This method is based on: https://www.geeksforgeeks.org/how-to-programmatically-hide-android-soft-keyboard/
+    private void closeKeyboard() {
+        View view = this.getCurrentFocus();
 
+        if (view != null) {
+            InputMethodManager manager
+                    = (InputMethodManager)getSystemService(
+                    Context.INPUT_METHOD_SERVICE);
+            manager
+                    .hideSoftInputFromWindow(
+                            view.getWindowToken(), 0);
+        }
+    }
 }
