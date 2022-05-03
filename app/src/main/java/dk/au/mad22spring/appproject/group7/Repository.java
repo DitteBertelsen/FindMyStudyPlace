@@ -58,12 +58,11 @@ public class Repository {
         firebaseConnection.getStudyPlacesRealTimeDb().observe(lifecycleOwner, new Observer<List<StudyPlace>>() {
             @Override
             public void onChanged(List<StudyPlace> studyPlaces) {
-                realtimeList = studyPlaces;
-                if (studyPlaces == null){
+                if (studyPlaces.size() == 0){
+                    realtimeList = studyPlaces;
                     initializeStudyplaces();
-
                } else {
-                   compareStudyplaces();
+                   //compareStudyplaces();
                }
             }
         });
@@ -72,10 +71,7 @@ public class Repository {
             @Override
             public void onChanged(ArrayList<StudyPlace> studyPlaces) {
                 storageList = studyPlaces;
-                if (studyPlaces == null){
-                    initializeStudyplaces();
-
-                } else {
+                if (realtimeList != null){
                     compareStudyplaces();
                 }
             }
@@ -129,15 +125,16 @@ public class Repository {
                 realTimeStudyPlace.setProperties(storageStudyplace.getProperties());
             }
 
-            //gem listen i real time db for log in user
-            firebaseConnection.saveStudyPlaceList(realtimeList);
         }
+
+        //gem listen i real time db for log in user
+        firebaseConnection.saveStudyPlaceList(storageList);
     }
 
 
-    public MutableLiveData<ArrayList<StudyPlace>> getAllStudyPlaces()
+    public MutableLiveData<List<StudyPlace>> getAllStudyPlaces()
     {
-        return cloudStorage.getStudyPlaceListItems();
+        return firebaseConnection.getStudyPlacesRealTimeDb();
     }
 
     public String getCurrentUser() {

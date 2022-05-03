@@ -8,10 +8,12 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -163,8 +165,12 @@ public class FirebaseConnection {
         studyPlace.setUserRating(newRating);
         try {
             String userId = auth.getCurrentUser().getUid();
-            database.getReference("users/" + userId + "/studyPlaces")
-                    .child(String.valueOf(studyPlace.getId())).setValue(studyPlace);
+
+            DatabaseReference refPlaces = database.getReference("users/" + userId + "/studyPlaces");   //reference to list of study places
+            String key = refPlaces.push().getKey(); //push adds new element in list - save key for easy update of objects
+
+            refPlaces.child(key).setValue(studyPlace);
+
         } catch (Exception ex) {
             Log.e("DATA", "onStudyPlaceRatingChanged: Error updating user rating", ex);
         }
@@ -174,9 +180,16 @@ public class FirebaseConnection {
         //TODO test save
         try {
             String userId = auth.getCurrentUser().getUid();
-            database.getReference("users/" + userId + "/studyPlaces").setValue(studyPlaceList);
+            DatabaseReference studyRef = database.getReference("users");
+
+            for (StudyPlace studyPlace: studyPlaceList) {
+                //String key = studyRef.push().getKey();
+                studyRef.child(userId).child("studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);
+                Log.e("DATA", "saveStudyPlaceList: study place added:" + studyPlace.getTitle());
+            }
+
         } catch (Exception ex) {
-            Log.e("DATA", "onStudyPlaceRatingChanged: Error updating user study places", ex);
+            Log.e("DATA", "saveStudyPlaceList: Error saving user study places", ex);
         }
     }
 

@@ -6,26 +6,28 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dk.au.mad22spring.appproject.group7.Repository;
 import dk.au.mad22spring.appproject.group7.StudyPlaceType;
 import dk.au.mad22spring.appproject.group7.models.StudyPlace;
 
 public class StudyPlaceListViewModel extends ViewModel {
-    private MutableLiveData<ArrayList<StudyPlace>> studyPlaces;
+    private MutableLiveData<List<StudyPlace>> studyPlaces;
     private Repository repository;
 
     public StudyPlaceListViewModel() {
         repository = Repository.getInstance();
-        studyPlaces = repository.getAllStudyPlaces();
+        studyPlaces = new MutableLiveData<>();
+        studyPlaces.setValue(new ArrayList<>());
     }
 
     public void updateStudyPlaceRating(int index) {
         //TODO call repo to update rating
     }
 
-    public MutableLiveData<ArrayList<StudyPlace>> getStudyPlaces() {
-        return studyPlaces;
+    public MutableLiveData<List<StudyPlace>> getStudyPlaces() {
+        return repository.getAllStudyPlaces();
     }
 
     public void CheckForNewStudyplaces(LifecycleOwner lifecycleOwner) {

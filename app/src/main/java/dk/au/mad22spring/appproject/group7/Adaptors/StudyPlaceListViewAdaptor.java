@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dk.au.mad22spring.appproject.group7.R;
 import dk.au.mad22spring.appproject.group7.models.StudyPlace;
@@ -19,10 +20,10 @@ public class StudyPlaceListViewAdaptor extends RecyclerView.Adapter<StudyPlaceLi
 
     public interface IStudyPlaceClickedListener{
         void onItemClicked(int index);
-        void onUserRatingChanged(ArrayList<StudyPlace> studyPlaces, float newRating);
+        void onUserRatingChanged(List<StudyPlace> studyPlaces, float newRating);
     }
 
-    private ArrayList<StudyPlace> studyPlaces;
+    private List<StudyPlace> studyPlaces;
     private IStudyPlaceClickedListener studyPlaceClickListener;
 
     public StudyPlaceListViewAdaptor(IStudyPlaceClickedListener listner){
@@ -30,7 +31,7 @@ public class StudyPlaceListViewAdaptor extends RecyclerView.Adapter<StudyPlaceLi
         studyPlaces = new ArrayList<>();
     }
 
-    public void updateStudyPlaces(ArrayList<StudyPlace> itemLists){
+    public void updateStudyPlaces(List<StudyPlace> itemLists){
         studyPlaces = itemLists;
         notifyDataSetChanged();
     }

@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dk.au.mad22spring.appproject.group7.Fragments.StudyPlaceListViewModel;
 import dk.au.mad22spring.appproject.group7.R;
@@ -44,7 +45,7 @@ public class MapFragment extends Fragment {
     private StudyPlace studyPlace;
     private double tempLat;
     private double tempLong;
-    private LiveData<ArrayList<StudyPlace>> studyPlaceList;
+    private LiveData<List<StudyPlace>> studyPlaceList;
     public static final int PERMISSIONS_REQUEST_LOCATION = 1;
 
     @Override

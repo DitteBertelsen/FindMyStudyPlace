@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dk.au.mad22spring.appproject.group7.Adaptors.StudyPlaceListViewAdaptor;
 import dk.au.mad22spring.appproject.group7.R;
@@ -32,7 +33,7 @@ public class StudyPlaceListFragment extends Fragment implements StudyPlaceListVi
     private RecyclerView.LayoutManager layoutMan;
 
     //Define other objects
-    private ArrayList<StudyPlace> studyPlaces;
+    private List<StudyPlace> studyPlaces;
     private StudyPlaceListViewModel viewModel;
 
     public static StudyPlaceListFragment newInstance() {
@@ -60,9 +61,9 @@ public class StudyPlaceListFragment extends Fragment implements StudyPlaceListVi
         rcvStudyPlaceView.setLayoutManager(layoutMan);
 
         viewModel = new ViewModelProvider(getActivity()).get(StudyPlaceListViewModel.class);
-        viewModel.getStudyPlaces().observe(this.getViewLifecycleOwner(), new Observer<ArrayList<StudyPlace>>() {
+        viewModel.getStudyPlaces().observe(this.getViewLifecycleOwner(), new Observer<List<StudyPlace>>() {
             @Override
-            public void onChanged(ArrayList<StudyPlace> items) {
+            public void onChanged(List<StudyPlace> items) {
                 studyPlaces = items;
                 adapter.updateStudyPlaces(items);
             }
@@ -75,7 +76,7 @@ public class StudyPlaceListFragment extends Fragment implements StudyPlaceListVi
     }
 
     @Override
-    public void onUserRatingChanged(ArrayList<StudyPlace> studyPlaces, float newRating) {
+    public void onUserRatingChanged(List<StudyPlace> studyPlaces, float newRating) {
 
     }
 

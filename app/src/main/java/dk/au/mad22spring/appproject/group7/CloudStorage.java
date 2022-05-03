@@ -2,6 +2,7 @@ package dk.au.mad22spring.appproject.group7;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.volley.Request;
@@ -10,8 +11,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StreamDownloadTask;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -48,6 +54,9 @@ public class CloudStorage {
         if(mStudyPlaceList == null) {
             mStudyPlaceList = new MutableLiveData<>();
             mStudyPlaceList.setValue(new ArrayList<>());
+            sendRequestUsingVolley("https://firebasestorage.googleapis.com/v0/b/findmystudyplace.appspot.com/o/jsonTestStudyPlaces.txt?alt=media&token=334062b4-e595-4f48-8438-68416bef56eb&fbclid=IwAR1mTrXuafUx6ZW8ccd2uoxCq7zP3OgOleTo6G3SRv-57ezKBe_J2cN-s5k");
+
+            //sendRequest("jsonTestStudyPlaces.txt");
         }
 
         /*//Todo remove temp. data
@@ -71,13 +80,30 @@ public class CloudStorage {
         mStudyPlaceList.postValue(temp);
         */
 
-        sendRequest("gs://findmystudyplace.appspot.com");
 
         return mStudyPlaceList;
     }
 
+    private void sendRequest(String fileName) {
+        StorageReference studyPlaceRef = storageRef.child(fileName);
+        studyPlaceRef
+                .getStream()
+                .addOnCompleteListener(new OnCompleteListener<StreamDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<StreamDownloadTask.TaskSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(Constants.TAG_Rep, "onReponse" + task.getResult().toString());
+                            parseJson(task.getResult().toString());
+                        }
+                        else {
+                            Log.e(Constants.TAG_Rep, "onErrorResponse: Oh! That did not work..!");
+                        }
+                    }
+                });
+    }
 
-    private void sendRequest(String url) {
+
+    private void sendRequestUsingVolley(String url) {
         if (queue == null){
             queue = Volley.newRequestQueue(FMSPApplication.getAppContext());
         }
