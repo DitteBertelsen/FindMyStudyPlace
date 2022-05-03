@@ -24,6 +24,7 @@
     <string name="findStudyPlace">Find Study Place</string>
     <string name="single">Single</string>
     <string name="map">Map</string>
+    <string name="userlocation">Your location</string>
     <string name="list">List</string>
     <string name="sortBy">Sort By</string>
     <string name="shareLocation">Share Location</string>
