@@ -55,7 +55,7 @@ public class FirebaseConnection {
             auth = FirebaseAuth.getInstance();
         }
         if (database == null) {
-            database = FirebaseDatabase.getInstance();
+            database = FirebaseDatabase.getInstance("https://findmystudyplace-default-rtdb.europe-west1.firebasedatabase.app/");
         }
 
         studyPlaces = new ArrayList<>();
@@ -111,6 +111,8 @@ public class FirebaseConnection {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d(Constants.TAG_MAIN, "onComplete: Created User");
+                            //Todo delete?
+                            database.getReference().child("users").setValue(auth.getCurrentUser().getUid());
                             isUserCreated.postValue(true);
                         } else {
                             Log.d(Constants.TAG_MAIN, "onComplete: Failed to create user", task.getException());
@@ -136,7 +138,7 @@ public class FirebaseConnection {
     private void setupFirebaseListener() {
         //TODO get the userId from the repository instead
         String userId = auth.getCurrentUser().getUid();
-        DatabaseReference refDB = database.getReference("users/" + userId + "/studyPlaces");
+        DatabaseReference refDB = database.getReference("users/" + userId + "/studyplaces");
 
         //Listener listening for changes in the database
         refDB.addValueEventListener(new ValueEventListener() {
@@ -183,8 +185,8 @@ public class FirebaseConnection {
             DatabaseReference studyRef = database.getReference("users");
 
             for (StudyPlace studyPlace: studyPlaceList) {
-                //String key = studyRef.push().getKey();
-                studyRef.child(userId).child("studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);
+                String key = studyRef.push().getKey();
+                studyRef.child(userId).child("studyplaces").child(key).setValue(studyPlace);
                 Log.e("DATA", "saveStudyPlaceList: study place added:" + studyPlace.getTitle());
             }
 
