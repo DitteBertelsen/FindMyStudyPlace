@@ -74,4 +74,9 @@ public class StudyPlaceListFragment extends Fragment implements StudyPlaceListVi
         viewModel.updateStudyPlaceRating(index);
     }
 
+    @Override
+    public void onUserRatingChanged(ArrayList<StudyPlace> studyPlaces, float newRating) {
+
+    }
+
 }

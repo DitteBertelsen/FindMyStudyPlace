@@ -42,7 +42,7 @@
     <string name="Comments">Comments</string>
     <string name="txtFriendDoesNotExist">Friend Does Not Exist...</string>
     <string name="txtSharedLocation">Location shared with friends</string>
-
+    <string name="ratbarRating">RatingBar</string>
 
 
 </resources>

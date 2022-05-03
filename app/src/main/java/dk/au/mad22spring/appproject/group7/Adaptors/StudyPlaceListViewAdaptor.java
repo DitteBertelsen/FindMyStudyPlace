@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,18 +19,19 @@ public class StudyPlaceListViewAdaptor extends RecyclerView.Adapter<StudyPlaceLi
 
     public interface IStudyPlaceClickedListener{
         void onItemClicked(int index);
+        void onUserRatingChanged(ArrayList<StudyPlace> studyPlaces, float newRating);
     }
 
-    private ArrayList<StudyPlace> studyplaces;
+    private ArrayList<StudyPlace> studyPlaces;
     private IStudyPlaceClickedListener studyPlaceClickListener;
 
     public StudyPlaceListViewAdaptor(IStudyPlaceClickedListener listner){
         studyPlaceClickListener = listner;
-        studyplaces = new ArrayList<>();
+        studyPlaces = new ArrayList<>();
     }
 
     public void updateStudyPlaces(ArrayList<StudyPlace> itemLists){
-        studyplaces = itemLists;
+        studyPlaces = itemLists;
         notifyDataSetChanged();
     }
 
@@ -46,17 +48,26 @@ public class StudyPlaceListViewAdaptor extends RecyclerView.Adapter<StudyPlaceLi
     public void onBindViewHolder(@NonNull StudyPlaceItemViewHolder holder, int position) {
         //Todo add image, position
 
-        holder.txtTitle.setText(studyplaces.get(position).getTitle());
-        holder.txtType.setText(studyplaces.get(position).getType().toString());
-        holder.txtRating.setText(studyplaces.get(position).getUserRating().toString());
+        holder.txtTitle.setText(studyPlaces.get(position).getTitle());
+        holder.txtType.setText(studyPlaces.get(position).getType().toString());
+        holder.txtRating.setText(studyPlaces.get(position).getUserRating().toString());
+        holder.ratbarRating.setRating(studyPlaces.get(position).getUserRating().floatValue());
+        holder.ratbarRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float newRating, boolean bool) {
+                if(bool) {
+                    studyPlaceClickListener.onUserRatingChanged(studyPlaces, newRating);
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        if(studyplaces == null){
+        if(studyPlaces == null){
             return 0;
         } else {
-            return studyplaces.size();
+            return studyPlaces.size();
         }
     }
 
@@ -67,6 +78,7 @@ public class StudyPlaceListViewAdaptor extends RecyclerView.Adapter<StudyPlaceLi
         TextView txtType;
         TextView txtLocation;
         TextView txtRating;
+        RatingBar ratbarRating;
 
         private IStudyPlaceClickedListener list;
 
@@ -76,8 +88,8 @@ public class StudyPlaceListViewAdaptor extends RecyclerView.Adapter<StudyPlaceLi
             imgIcon = itemView.findViewById(R.id.imgstudyplaceimage);
             txtTitle = itemView.findViewById(R.id.txtTitle);
             txtType = itemView.findViewById(R.id.txtType);
-            txtLocation = itemView.findViewById(R.id.txtLocation);
             txtRating = itemView.findViewById(R.id.txtRating);
+            ratbarRating = itemView.findViewById(R.id.ratbarRating);
 
             itemView.setOnClickListener(this);
         }
