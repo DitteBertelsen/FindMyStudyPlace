@@ -71,8 +71,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         setUpUI();
 
-
-
+        viewModel.CheckForNewStudyplaces(this);
     }
 
     private void setUpUI() {
@@ -86,7 +85,7 @@ public class OverviewActivity extends AppCompatActivity {
             }
         });
 
-        btnMap=findViewById(R.id.btnMap);
+        btnMap = findViewById(R.id.btnMap);
         btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

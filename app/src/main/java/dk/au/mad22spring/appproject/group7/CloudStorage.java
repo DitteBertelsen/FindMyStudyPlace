@@ -50,7 +50,7 @@ public class CloudStorage {
             mStudyPlaceList.setValue(new ArrayList<>());
         }
 
-        //Todo remove temp. data
+        /*//Todo remove temp. data
         ArrayList<StudyPlace> temp = new ArrayList<>();
         StudyPlace tempstudy1 = new StudyPlace();
         tempstudy1.setTitle("Nygaard, Kælder");
@@ -68,10 +68,10 @@ public class CloudStorage {
 
         temp.add(tempstudy1);
         temp.add(tempstudy2);
-
         mStudyPlaceList.postValue(temp);
+        */
 
-        //sendRequest("gs://findmystudyplace.appspot.com");
+        sendRequest("gs://findmystudyplace.appspot.com");
 
         return mStudyPlaceList;
     }
@@ -87,7 +87,7 @@ public class CloudStorage {
                     @Override
                     public void onResponse(String response) {
                         Log.d(Constants.TAG_Rep, "onReponse" + response);
-                        parseSearchJson(response);
+                        parseJson(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -99,7 +99,7 @@ public class CloudStorage {
         queue.add(stringRequest);
     }
 
-    private void parseSearchJson(String json) {
+    private void parseJson(String json) {
         Gson gson = new GsonBuilder().create();
         StudyPlaceList studyPlaceList = gson.fromJson(json, StudyPlaceList.class);
         if (studyPlaceList != null){

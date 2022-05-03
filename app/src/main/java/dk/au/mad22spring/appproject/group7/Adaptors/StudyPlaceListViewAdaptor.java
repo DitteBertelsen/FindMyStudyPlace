@@ -80,6 +80,7 @@ public class StudyPlaceListViewAdaptor extends RecyclerView.Adapter<StudyPlaceLi
         TextView txtRating;
         RatingBar ratbarRating;
 
+
         private IStudyPlaceClickedListener list;
 
         public StudyPlaceItemViewHolder(@NonNull View itemView, IStudyPlaceClickedListener listener) {

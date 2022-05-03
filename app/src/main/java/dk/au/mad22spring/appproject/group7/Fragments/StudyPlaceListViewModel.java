@@ -1,5 +1,6 @@
 package dk.au.mad22spring.appproject.group7.Fragments;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -25,6 +26,10 @@ public class StudyPlaceListViewModel extends ViewModel {
 
     public MutableLiveData<ArrayList<StudyPlace>> getStudyPlaces() {
         return studyPlaces;
+    }
+
+    public void CheckForNewStudyplaces(LifecycleOwner lifecycleOwner) {
+        repository.CheckForNewStudyplaces(lifecycleOwner);
     }
 
     public void removeGroupPlaces(){

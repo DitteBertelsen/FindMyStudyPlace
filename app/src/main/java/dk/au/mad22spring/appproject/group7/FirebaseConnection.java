@@ -25,8 +25,9 @@ import dk.au.mad22spring.appproject.group7.models.StudyPlace;
 
 public class FirebaseConnection {
 
-    FirebaseAuth auth;
+    private FirebaseAuth auth;
     private static FirebaseConnection instance;
+    private FirebaseDatabase database;
 
     private MutableLiveData<Boolean> isUserCreated;
     private MutableLiveData<Boolean> isUserSignedIn;
@@ -47,9 +48,12 @@ public class FirebaseConnection {
     }
 
 
-    public  FirebaseConnection() {
+    public FirebaseConnection() {
         if(auth == null) {
             auth = FirebaseAuth.getInstance();
+        }
+        if (database == null) {
+            database = FirebaseDatabase.getInstance();
         }
 
         studyPlaces = new ArrayList<>();
@@ -97,7 +101,6 @@ public class FirebaseConnection {
         return isUserCreated;
     }
 
-    //TODO hvordan fixer vi at addOnCompleteListener tager en aktivitet som parameter?
     public void createNewUser(String email, String password, Activity activity)
     {
         auth.createUserWithEmailAndPassword(email, password)
@@ -129,9 +132,8 @@ public class FirebaseConnection {
     //Method created based on the Demo2 from lesson 10: WorldMan
     //sets up a Firebase listener for the list of StudyPlaces
     private void setupFirebaseListener() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
         //TODO get the userId from the repository instead
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String userId = auth.getCurrentUser().getUid();
         DatabaseReference refDB = database.getReference("users/" + userId + "/studyPlaces");
 
         //Listener listening for changes in the database
@@ -160,17 +162,25 @@ public class FirebaseConnection {
     public void onStudyPlaceRatingChanged(StudyPlace studyPlace, double newRating){
         studyPlace.setUserRating(newRating);
         try {
-            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            FirebaseDatabase.getInstance().getReference("users/" + userId + "/studyPlaces")
+            String userId = auth.getCurrentUser().getUid();
+            database.getReference("users/" + userId + "/studyPlaces")
                     .child(String.valueOf(studyPlace.getId())).setValue(studyPlace);
         } catch (Exception ex) {
             Log.e("DATA", "onStudyPlaceRatingChanged: Error updating user rating", ex);
         }
     }
 
+    public void saveStudyPlaceList(List<StudyPlace> studyPlaceList) {
+        //TODO test save
+        try {
+            String userId = auth.getCurrentUser().getUid();
+            database.getReference("users/" + userId + "/studyPlaces").setValue(studyPlaceList);
+        } catch (Exception ex) {
+            Log.e("DATA", "onStudyPlaceRatingChanged: Error updating user study places", ex);
+        }
+    }
+
     public void LogOut(){
         auth.signOut();
     }
-
-
 }
