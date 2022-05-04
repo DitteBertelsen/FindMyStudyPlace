@@ -6,5 +6,7 @@ public class Constants {
     public static final String TAG_MAIN = "Main";
     public static final String TAG_Overview = "Overview";
     public static final String USER_NAME = "User name";
+    public static final String SERVICE_CHANNEL = "serviceChannel";
+    public static final int NOTIFICATION_ID = 1;
 
 }

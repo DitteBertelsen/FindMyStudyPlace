@@ -47,5 +47,8 @@
     <string name="AddBuilding">Add Building:</string>
     <string name="Building">Building</string>
 
+    //Notofication:
+    <string name="notificationTitle">has shared their location with you!</string>
+    <string name="notificationText">Building:</string>
 
 </resources>

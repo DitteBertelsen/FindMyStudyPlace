@@ -1,6 +1,7 @@
 package dk.au.mad22spring.appproject.group7;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,21 +16,33 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+import dk.au.mad22spring.appproject.group7.models.NotificationModel;
+import dk.au.mad22spring.appproject.group7.viewModels.ShareLocationViewModel;
+
 public class ShareLocationActivity extends AppCompatActivity {
 
     Button btnBack, btnShareLocation, btnAdd;
     EditText edtFriendEmail, edtBuilding,edtComment;
     TextView txtAddedFriends;
+    private ShareLocationViewModel slViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_location);
 
+        slViewModel = new ViewModelProvider(this).get(ShareLocationViewModel.class);
+
         setUpUI();
     }
 
     private void setUpUI() {
+        edtBuilding = findViewById(R.id.edtBuilding);
+        edtComment = findViewById(R.id.edtComment);
+        edtFriendEmail = findViewById(R.id.edtFriendEmail);
+
+        txtAddedFriends = findViewById(R.id.txtAddedFriends);
+
         btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,8 +65,12 @@ public class ShareLocationActivity extends AppCompatActivity {
                 }
 
                 //Todo opret NotificationModel:
+                NotificationModel notificationModel = new NotificationModel();
+                notificationModel.setBuilding(edtBuilding.getText().toString());
+                //TODO få Trine til at tilføje lat og long
+                notificationModel.setComment(edtComment.getText().toString());
 
-                //Todo Share location...
+                slViewModel.pushNotification(notificationModel, friends);
 
                 setResult(RESULT_OK);
                 finish();
@@ -78,10 +95,5 @@ public class ShareLocationActivity extends AppCompatActivity {
             }
         });
 
-        edtBuilding = findViewById(R.id.edtBuilding);
-        edtComment = findViewById(R.id.edtComment);
-        edtFriendEmail = findViewById(R.id.edtFriendEmail);
-
-        txtAddedFriends = findViewById(R.id.txtAddedFriends);
     }
 }

@@ -72,7 +72,14 @@ public class OverviewActivity extends AppCompatActivity {
 
         setUpUI();
 
+        //startForegroundService();
+
         //viewModel.CheckForNewStudyplaces(this);
+    }
+
+    private void startForegroundService() {
+        Intent fgIntent = new Intent(this, NotificationService.class);
+        startService(fgIntent);
     }
 
     private void setUpUI() {
