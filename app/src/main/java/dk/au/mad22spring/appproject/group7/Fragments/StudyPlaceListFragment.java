@@ -13,19 +13,24 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import dk.au.mad22spring.appproject.group7.Adaptors.IStudyPlaceClickedListener;
 import dk.au.mad22spring.appproject.group7.Adaptors.StudyPlaceListViewAdaptor;
 import dk.au.mad22spring.appproject.group7.R;
 import dk.au.mad22spring.appproject.group7.models.StudyPlace;
 
 //This class is based on Tracker demo
-public class StudyPlaceListFragment extends Fragment implements StudyPlaceListViewAdaptor.IStudyPlaceClickedListener {
+public class StudyPlaceListFragment extends Fragment implements IStudyPlaceClickedListener {
 
     //Define objects for recycler view
     private StudyPlaceListViewAdaptor adapter;
@@ -76,7 +81,14 @@ public class StudyPlaceListFragment extends Fragment implements StudyPlaceListVi
     }
 
     @Override
-    public void onUserRatingChanged(List<StudyPlace> studyPlaces, float newRating) {
+    public void onUserRatingChanged(StudyPlace studyPlace, float newRating) {
+        studyPlace.setUserRating((double) newRating);
+        try {
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            FirebaseDatabase.getInstance().getReference("users/" + userId + "/studyPlaces/").child(""+studyPlace.getId()).setValue(studyPlace);  //update object in Firebase
+        } catch (Exception ex) {
+            Log.e("DATA", "error updating", ex);
+        }
 
     }
 

@@ -26,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import dk.au.mad22spring.appproject.group7.Adaptors.StudyPlaceListViewAdaptor;
 import dk.au.mad22spring.appproject.group7.Fragments.StudyPlaceListFragment;
 import dk.au.mad22spring.appproject.group7.Fragments.StudyPlaceListViewModel;
 import dk.au.mad22spring.appproject.group7.models.StudyPlace;

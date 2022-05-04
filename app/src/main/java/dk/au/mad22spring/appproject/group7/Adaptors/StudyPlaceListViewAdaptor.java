@@ -18,11 +18,6 @@ import dk.au.mad22spring.appproject.group7.models.StudyPlace;
 
 public class StudyPlaceListViewAdaptor extends RecyclerView.Adapter<StudyPlaceListViewAdaptor.StudyPlaceItemViewHolder>{
 
-    public interface IStudyPlaceClickedListener{
-        void onItemClicked(int index);
-        void onUserRatingChanged(List<StudyPlace> studyPlaces, float newRating);
-    }
-
     private List<StudyPlace> studyPlaces;
     private IStudyPlaceClickedListener studyPlaceClickListener;
 
@@ -48,16 +43,18 @@ public class StudyPlaceListViewAdaptor extends RecyclerView.Adapter<StudyPlaceLi
     @Override
     public void onBindViewHolder(@NonNull StudyPlaceItemViewHolder holder, int position) {
         //Todo add image, position
+        final StudyPlace studyPlace = studyPlaces.get(position);
 
-        holder.txtTitle.setText(studyPlaces.get(position).getTitle());
-        holder.txtType.setText(studyPlaces.get(position).getType().toString());
-        holder.txtRating.setText(studyPlaces.get(position).getUserRating().toString());
-        holder.ratbarRating.setRating(studyPlaces.get(position).getUserRating().floatValue());
+        holder.txtTitle.setText(studyPlace.getTitle());
+        holder.txtType.setText(studyPlace.getType().toString());
+        holder.txtRating.setText(studyPlace.getUserRating().toString());
+        holder.ratbarRating.setRating(studyPlace.getUserRating().floatValue());
         holder.ratbarRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float newRating, boolean bool) {
                 if(bool) {
-                    studyPlaceClickListener.onUserRatingChanged(studyPlaces, newRating);
+                    studyPlaceClickListener.onUserRatingChanged(studyPlace, newRating);
+                    holder.txtRating.setText(""+newRating);
                 }
             }
         });
