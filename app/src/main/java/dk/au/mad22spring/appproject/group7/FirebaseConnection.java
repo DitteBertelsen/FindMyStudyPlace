@@ -165,28 +165,32 @@ public class FirebaseConnection {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("DATA", "onCancelled: Failed to read values", error.toException());
+                Log.w("DATA", "onCancelled: Failed to read study place values", error.toException());
             }
         });
 
-       /* DatabaseReference notificationRef = database.getReference("users/" + userId + "/notifications");
-        studyPlaceRef.addValueEventListener(new ValueEventListener() {
+       DatabaseReference notificationRef = database.getReference("users/" + userId + "/notifications");
+       notificationRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> snapshots = dataSnapshot.getChildren();
 
-                if (snapshots.iterator().hasNext()) {
-                    mNotificaiton.postValue(snapshots.iterator().next().getValue(Notification.class));
+                Notification tempNoti = new Notification();
+
+                //Overrides the values of Notification until it reaches the last object:
+                while(snapshots.iterator().hasNext()) {
+                        tempNoti = snapshots.iterator().next().getValue(Notification.class);
                 }
+
+                //Post the last Notification to mutable object:
+                mNotificaiton.postValue(tempNoti);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.w("DATA", "onCancelled: Failed to read notification values", error.toException());
             }
         });
-
-        */
     }
 
     //Method created based on the Demo2 from lesson 10: WorldMan
