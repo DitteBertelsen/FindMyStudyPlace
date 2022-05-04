@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import dk.au.mad22spring.appproject.group7.models.Notification;
 import dk.au.mad22spring.appproject.group7.models.StudyPlace;
 
 public class FirebaseConnection {
@@ -38,6 +39,7 @@ public class FirebaseConnection {
     private ArrayList<StudyPlace> studyPlaces;
     //private List<StudyPlace> studyPlaces;
     private MutableLiveData<List<StudyPlace>> mStudyPlaces;
+    private MutableLiveData<Notification> mNotificaiton;
 
 
     public static FirebaseConnection getInstance()
@@ -133,15 +135,22 @@ public class FirebaseConnection {
         return mStudyPlaces;
     }
 
+    public MutableLiveData<Notification> getNotifications(){
+        if (mNotificaiton == null) {
+            mNotificaiton = new MutableLiveData<>();
+        }
+        return  mNotificaiton;
+    }
+
     //Method created based on the Demo2 from lesson 10: WorldMan
     //sets up a Firebase listener for the list of StudyPlaces
     private void setupFirebaseListener() {
         //TODO get the userId from the repository instead
         String userId = auth.getCurrentUser().getUid();
-        DatabaseReference refDB = database.getReference("users/" + userId + "/studyplaces");
+        DatabaseReference studyPlaceRef = database.getReference("users/" + userId + "/studyplaces");
 
         //Listener listening for changes in the database
-        refDB.addValueEventListener(new ValueEventListener() {
+        studyPlaceRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //Uses the iterator to go through results
@@ -160,6 +169,24 @@ public class FirebaseConnection {
             }
         });
 
+       /* DatabaseReference notificationRef = database.getReference("users/" + userId + "/notifications");
+        studyPlaceRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> snapshots = dataSnapshot.getChildren();
+
+                if (snapshots.iterator().hasNext()) {
+                    mNotificaiton.postValue(snapshots.iterator().next().getValue(Notification.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        */
     }
 
     //Method created based on the Demo2 from lesson 10: WorldMan
@@ -167,12 +194,9 @@ public class FirebaseConnection {
         studyPlace.setUserRating(newRating);
         try {
             String userId = auth.getCurrentUser().getUid();
+            //DatabaseReference refPlaces = database.getReference("users/" + userId + "/studyPlaces");   //reference to list of study places
 
-            DatabaseReference refPlaces = database.getReference("users/" + userId + "/studyPlaces");   //reference to list of study places
-            String key = refPlaces.push().getKey(); //push adds new element in list - save key for easy update of objects
-
-            refPlaces.child(key).setValue(studyPlace);
-
+            database.getReference("users/" + userId + "/studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);  //update object in Firebase
         } catch (Exception ex) {
             Log.e("DATA", "onStudyPlaceRatingChanged: Error updating user rating", ex);
         }
@@ -185,8 +209,7 @@ public class FirebaseConnection {
             DatabaseReference studyRef = database.getReference("users");
 
             for (StudyPlace studyPlace: studyPlaceList) {
-                String key = studyRef.push().getKey();
-                studyRef.child(userId).child("studyplaces").child(key).setValue(studyPlace);
+                studyRef.child(userId).child("studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);
                 Log.e("DATA", "saveStudyPlaceList: study place added:" + studyPlace.getTitle());
             }
 

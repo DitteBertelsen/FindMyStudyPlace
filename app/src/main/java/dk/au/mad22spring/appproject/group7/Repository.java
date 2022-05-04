@@ -55,37 +55,41 @@ public class Repository {
 
     //Todo how to syncronize??!!
     public void CheckForNewStudyplaces(LifecycleOwner lifecycleOwner){
-        firebaseConnection.getStudyPlacesRealTimeDb().observe(lifecycleOwner, new Observer<List<StudyPlace>>() {
-            @Override
-            public void onChanged(List<StudyPlace> studyPlaces) {
-                if (studyPlaces.size() == 0){
-                    realtimeList = studyPlaces;
-                    initializeStudyplaces();
-               } else {
-                   //compareStudyplaces();
-               }
-            }
-        });
-
         cloudStorage.getStudyPlaceListItems().observe(lifecycleOwner, new Observer<ArrayList<StudyPlace>>() {
             @Override
             public void onChanged(ArrayList<StudyPlace> studyPlaces) {
                 storageList = studyPlaces;
-                if (realtimeList != null){
-                    compareStudyplaces();
-                }
+
+                firebaseConnection.getStudyPlacesRealTimeDb().observe(lifecycleOwner, new Observer<List<StudyPlace>>() {
+                    @Override
+                    public void onChanged(List<StudyPlace> studyPlaces) {
+                        if (studyPlaces.size() == 0 ) {
+                            realtimeList = storageList;
+
+                        }
+                        if (storageList.size() != 0) {
+                            realtimeList = studyPlaces;
+                            compareStudyplaces();
+                        }
+                    }
+                });
             }
         });
+
+
+
     }
 
     //This method is called when an user does not have any study places in db (an user is created):
-    private void initializeStudyplaces() {
+    /*private void initializeStudyplaces() {
         //if null - hent study places from firestorage:
-        realtimeList = cloudStorage.getStudyPlaceListItems().getValue();
+        //realtimeList = cloudStorage.getStudyPlaceListItems().getValue();
 
         //gem i real time db for log in user
         firebaseConnection.saveStudyPlaceList(realtimeList);
     }
+
+     */
 
     //This method is called to check if there are changes in the study places in the storage:
     public void compareStudyplaces() {
@@ -131,6 +135,9 @@ public class Repository {
         firebaseConnection.saveStudyPlaceList(storageList);
     }
 
+    public void onUserRatingChanged(StudyPlace studyPlace, double newRating) {
+        firebaseConnection.onStudyPlaceRatingChanged(studyPlace, newRating);
+    }
 
     public MutableLiveData<List<StudyPlace>> getAllStudyPlaces()
     {

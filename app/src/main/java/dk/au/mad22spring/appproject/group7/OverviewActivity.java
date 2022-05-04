@@ -72,7 +72,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         setUpUI();
 
-        viewModel.CheckForNewStudyplaces(this);
+        //viewModel.CheckForNewStudyplaces(this);
     }
 
     private void setUpUI() {
