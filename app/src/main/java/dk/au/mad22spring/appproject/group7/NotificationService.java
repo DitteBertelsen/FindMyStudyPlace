@@ -65,13 +65,13 @@ public class NotificationService extends LifecycleService {
                 .build();
 
         startForeground(Constants.NOTIFICATION_ID, notification);
-
     }
 
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
+        super.onBind(intent);
         return null;
     }
 }

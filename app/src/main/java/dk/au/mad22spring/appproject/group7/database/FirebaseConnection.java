@@ -35,7 +35,6 @@ public class FirebaseConnection {
 
     //Upset database
     private ArrayList<StudyPlace> studyPlaces;
-    //private List<StudyPlace> studyPlaces;
     private MutableLiveData<List<StudyPlace>> mStudyPlaces;
     private MutableLiveData<NotificationModel> mNotificaiton;
 
@@ -116,10 +115,8 @@ public class FirebaseConnection {
                             Log.d(Constants.TAG_MAIN, "onComplete: Failed to create user", task.getException());
                             isUserCreated.postValue(false);
                         }
-
                     }
                 });
-
     }
 
     //MutableLiveData for activities to observe for updates in realtime database
@@ -131,7 +128,7 @@ public class FirebaseConnection {
         return mStudyPlaces;
     }
 
-    public void pokeStudyPlaces() {
+    public void invokeGetStudyplaces() {
         mStudyPlaces.postValue(mStudyPlaces.getValue());
     }
 
@@ -213,7 +210,6 @@ public class FirebaseConnection {
             String userId = auth.getCurrentUser().getUid();
 
             database.getReference("users/" + userName + "/studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);  //update
-            //database.getReference("users/" + userId + "/studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);  //update object in Firebase
         } catch (Exception ex) {
             Log.e("DATA", "onStudyPlaceRatingChanged: Error updating user rating", ex);
         }

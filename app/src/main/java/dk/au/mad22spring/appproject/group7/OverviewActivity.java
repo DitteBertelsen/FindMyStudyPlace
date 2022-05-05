@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.BoringLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -40,11 +41,11 @@ public class OverviewActivity extends AppCompatActivity {
     Button btnShareLocation;
     Switch swtSingle;
 
-
     private String userName;
 
     private LiveData<ArrayList<StudyPlace>> studyPlaces;
     private StudyPlaceListViewModel studyPlaceListViewModel;
+    private Boolean justLoggedIn = false;
     private StudyPlaceListViewModel viewModel;
 
     private ActivityResultLauncher<Intent> shareLocationLauncher;
@@ -74,7 +75,10 @@ public class OverviewActivity extends AppCompatActivity {
 
         //startForegroundService();
 
-        viewModel.CheckForNewStudyplaces(this);
+        if (!justLoggedIn) {
+            justLoggedIn = true;
+            viewModel.CheckForNewStudyplaces(this);
+        }
     }
 
     //
@@ -88,6 +92,7 @@ public class OverviewActivity extends AppCompatActivity {
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                justLoggedIn = false;
                 viewModel.LogOut();
                 setResult(RESULT_OK);
                 finish();

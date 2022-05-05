@@ -77,7 +77,7 @@ public class StudyPlaceListFragment extends Fragment implements IStudyPlaceClick
 
     @Override
     public void onItemClicked(int index) {
-        viewModel.updateStudyPlaceRating(index);
+        //start detail activity (not implemented in this project)
     }
 
     @Override

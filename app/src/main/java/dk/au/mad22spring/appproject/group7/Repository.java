@@ -41,7 +41,6 @@ public class Repository {
         firebaseConnection = FirebaseConnection.getInstance();
     }
 
-    //Todo how to syncronize??!!
     public void CheckForNewStudyplaces(LifecycleOwner lifecycleOwner){
         cloudStorage.getStudyPlaceListItems().observe(lifecycleOwner, new Observer<ArrayList<StudyPlace>>() {
             @Override
@@ -66,27 +65,19 @@ public class Repository {
         });
     }
 
-    //Todo delete?
-    //This method is called when an user does not have any study places in db (an user is created):
-    /*private void initializeStudyplaces() {
-        //if null - hent study places from firestorage:
-        //realtimeList = cloudStorage.getStudyPlaceListItems().getValue();
-
-        //gem i real time db for log in user
-        firebaseConnection.saveStudyPlaceList(realtimeList);
-    }
-
-     */
-
     //This method is called to check if there are changes in the study places in the storage:
     public void compareStudyplaces(List<StudyPlace> realtimeList) {
+        //This controls if any changes has been made:
+        Boolean realTimeListHasChanges = false;
+
         //Check that both async calls has returned
         if (storageList.size() != 0) {
             //In case a new study place has been added to the storage list:
             for (StudyPlace studyplace: storageList) {
                 //Add the study place if it exists in the storageList but not in db list:
-                if (!realtimeList.contains(studyplace.getId())) {
+                if (realtimeList.contains(studyplace.getId())) {
                     realtimeList.add(studyplace);
+                    realTimeListHasChanges = true;
                 }
             }
 
@@ -105,13 +96,14 @@ public class Repository {
             //Deleting the items from realtimeList:
             for (StudyPlace studyplace: itemsToDelete) {
                 realtimeList.remove(studyplace);
+                realTimeListHasChanges = true;
             }
 
             //Update all attributes:
             for (StudyPlace storageStudyplace: storageList) {
                 //Find the matching object of storageStudyPlace i realtimeList:
                 StudyPlace realTimeStudyPlace = new StudyPlace();
-                Boolean studyplaceHasChanged = false;
+                Boolean studyplaceAttributesHaveChanged = false;
                 int indexInRealtimeList = -1;
 
                 for (StudyPlace studyPlace: realtimeList) {
@@ -119,24 +111,50 @@ public class Repository {
                         realTimeStudyPlace = studyPlace;
                         indexInRealtimeList = realtimeList.indexOf(studyPlace);
 
-                        realTimeStudyPlace.setTitle(storageStudyplace.getTitle());
-                        realTimeStudyPlace.setStudyPlaceLat(storageStudyplace.getStudyPlaceLat());
-                        realTimeStudyPlace.setStudyPlaceLong(storageStudyplace.getStudyPlaceLong());
-                        realTimeStudyPlace.setImage(storageStudyplace.getImage());
-                        realTimeStudyPlace.setType(storageStudyplace.getType());
-                        realTimeStudyPlace.setProperties(storageStudyplace.getProperties());
+                        if (realTimeStudyPlace.getTitle() != storageStudyplace.getTitle()) {
+                            realTimeStudyPlace.setTitle(storageStudyplace.getTitle());
+                            realTimeListHasChanges = true;
+                            studyplaceAttributesHaveChanged = true;
+                        }
 
-                        studyplaceHasChanged = true;
+                        if (realTimeStudyPlace.getStudyPlaceLat() != storageStudyplace.getStudyPlaceLat()) {
+                            realTimeStudyPlace.setStudyPlaceLat(storageStudyplace.getStudyPlaceLat());
+                            realTimeListHasChanges = true;
+                            studyplaceAttributesHaveChanged = true;
+                        }
+                        if (realTimeStudyPlace.getStudyPlaceLong() != storageStudyplace.getStudyPlaceLong()) {
+                            realTimeStudyPlace.setStudyPlaceLong(storageStudyplace.getStudyPlaceLong());
+                            realTimeListHasChanges = true;
+                            studyplaceAttributesHaveChanged = true;
+                        }
+                        if (realTimeStudyPlace.getImage() != storageStudyplace.getImage()) {
+                            realTimeStudyPlace.setImage(storageStudyplace.getImage());
+                            realTimeListHasChanges = true;
+                            studyplaceAttributesHaveChanged = true;
+                        }
+
+                        if (realTimeStudyPlace.getType() != storageStudyplace.getType()) {
+                            realTimeStudyPlace.setType(storageStudyplace.getType());
+                            realTimeListHasChanges = true;
+                            studyplaceAttributesHaveChanged = true;
+                        }
+                        if(realTimeStudyPlace.getProperties() != storageStudyplace.getProperties()) {
+                            realTimeStudyPlace.setProperties(storageStudyplace.getProperties());
+                            realTimeListHasChanges = true;
+                            studyplaceAttributesHaveChanged = true;
+                        }
                     }
                 }
-                if (studyplaceHasChanged) {
+                if (studyplaceAttributesHaveChanged) {
                     realtimeList.remove(indexInRealtimeList);
                     realtimeList.add(realTimeStudyPlace);
                 }
             }
 
-            //Save the updated list in db:
-            firebaseConnection.saveStudyPlaceList(realtimeList);
+            if (realTimeListHasChanges) {
+                //Save the updated list in db:
+                firebaseConnection.saveStudyPlaceList(realtimeList);
+            }
         }
     }
 
@@ -188,20 +206,13 @@ public class Repository {
         firebaseConnection.createNewUser(email, password, activity);
     }
 
-    public LiveData<List<StudyPlace>> getStudyPlacesRealTimeDb() {
-        return firebaseConnection.getStudyPlacesRealTimeDb();
-    }
-
-    public void onStudyPlaceRatingChanged(StudyPlace studyPlace, double newRating) {
-        firebaseConnection.onStudyPlaceRatingChanged(studyPlace, newRating);
-    }
-
     //When the user pushes 'Log out' button:
     public void LogOut(){
         firebaseConnection.LogOut();
     }
 
-    public void poke() {
-        firebaseConnection.pokeStudyPlaces();
+    //This method will invoke all observers:
+    public void invokeGetStudyplaces() {
+        firebaseConnection.invokeGetStudyplaces();
     }
 }
