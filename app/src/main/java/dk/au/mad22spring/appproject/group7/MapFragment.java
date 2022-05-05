@@ -44,25 +44,16 @@ import dk.au.mad22spring.appproject.group7.viewModels.MapFragmentViewmodel;
 
 //ref: https://www.geeksforgeeks.org/how-to-implement-google-map-inside-fragment-in-android/
 public class MapFragment extends Fragment implements LocationListener {
-    private static final long MIN_TIME_BETWEEN_LOCATION_UPDATES = 5 * 1000;    // milisecs
-    private static final float MIN_DISTANCE_MOVED_BETWEEN_LOCATION_UPDATES = 1;  // meters
-    public static final String EXTRA_USER_LATITUDE = "location_latitude";
-    public static final String EXTRA_USER_LONGITUDE = "location_longitude";
 
-
-    private boolean isTracking = false;
     private StudyPlaceListViewModel MFViewModel;
     private LocationManager locationManager;
-    private StudyPlace studyPlace;
-    private Location userLocation;
-    private double tempLat;
-    private double tempLong;
     private List<StudyPlace> studyPlaceList;
-    private ArrayList<StudyPlace> studyPlaceList1;
     public static final int PERMISSIONS_REQUEST_LOCATION = 1;
     private GoogleMap map;
     public Criteria criteria;
     public String bestProvider;
+    public Bitmap markerUser;
+    public Bitmap markerStudyPlace;
 
 
     @Override
@@ -82,7 +73,7 @@ public class MapFragment extends Fragment implements LocationListener {
                 getChildFragmentManager().findFragmentById(R.id.google_map);
 
         checkPermissions();
-        //startTracking();
+
 
         MFViewModel = new ViewModelProvider(getActivity()).get(StudyPlaceListViewModel.class);
 
@@ -92,7 +83,6 @@ public class MapFragment extends Fragment implements LocationListener {
             public void onMapReady(GoogleMap googleMap) {
                 map = googleMap;
                 showStudyPlaces(map);
-                //showUser(map,userLocation);
                 // When map is loaded
                 googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
@@ -104,7 +94,7 @@ public class MapFragment extends Fragment implements LocationListener {
             }
         });
 
-
+        //Get studyplaces from Viewmodel
         MFViewModel.getStudyPlaces().observe(this.getViewLifecycleOwner(), new Observer<List<StudyPlace>>() {
             @Override
             public void onChanged(List<StudyPlace> studyPlaces) {
@@ -113,19 +103,15 @@ public class MapFragment extends Fragment implements LocationListener {
             }
         });
 
-
-
         // Return view
         return view;
     }
 
-
+//Checks location permission
     private void checkPermissions() {
         if (ContextCompat.checkSelfPermission(FMSPApplication.getAppContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-
-            // No explanation needed, we can request the permission.
 
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -146,8 +132,7 @@ public class MapFragment extends Fragment implements LocationListener {
                     // got permission
                 } else {
                     // permission denied
-                    //in this case we just close the app
-                    //Toast.makeText(OverviewActivity, "You need to enable permission for Location to use the app", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "You need to enable permission to share", Toast.LENGTH_SHORT).show();
 
                 }
                 return;
@@ -155,7 +140,7 @@ public class MapFragment extends Fragment implements LocationListener {
         }
     }
 
-
+//method for adding markers for all studyplaces
     private void showStudyPlaces(GoogleMap googleMap) {
 
         if (map == null) {
@@ -168,6 +153,8 @@ public class MapFragment extends Fragment implements LocationListener {
         for (int i = 0; i < studyPlaceList.size(); i++) {
             studyPlace = studyPlaceList.get(i);
 
+            markerStudyPlace = makeMarkerIcon(R.drawable.billede5, 120, 100);
+
             //add markers
             // Initialize marker options
             MarkerOptions markerOptions = new MarkerOptions();
@@ -176,7 +163,7 @@ public class MapFragment extends Fragment implements LocationListener {
             // Set title of marker
             markerOptions.title(studyPlace.getTitle());
             //Add icon
-            //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.download));
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(markerStudyPlace));
             // Animating to zoom the marker
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(studyPlace.getStudyPlaceLat(), studyPlace.getStudyPlaceLong()), 15));
             // Add marker on map
@@ -185,6 +172,7 @@ public class MapFragment extends Fragment implements LocationListener {
         }
     }
 
+    //Get user location
     //ref: https://stackoverflow.com/questions/32290045/error-invoke-virtual-method-double-android-location-location-getlatitude-on?fbclid=IwAR3kLGm3UsJBEBiXPIGl8zZvIIjk4RheeSBXPnzZ78vtWP8J8zMXnZS2UZI
     protected void getLocation() {
         criteria = new Criteria();
@@ -205,14 +193,8 @@ public class MapFragment extends Fragment implements LocationListener {
     //ref: https://stackoverflow.com/questions/32290045/error-invoke-virtual-method-double-android-location-location-getlatitude-on?fbclid=IwAR3kLGm3UsJBEBiXPIGl8zZvIIjk4RheeSBXPnzZ78vtWP8J8zMXnZS2UZI
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        //Hey, a non null location! Sweet!
-
         //remove location callback:
         locationManager.removeUpdates(this);
-
-        //open the map:
-        //tempLat = location.getLatitude();
-        //tempLong = location.getLongitude();
 
         showUser(map,location);
     }
@@ -242,8 +224,10 @@ public class MapFragment extends Fragment implements LocationListener {
         LocationListener.super.onProviderDisabled(provider);
     }
 
-
+//Shows user location with marker on map
     private void showUser(GoogleMap googleMap, Location userLocation) {
+
+        markerUser = makeMarkerIcon(R.drawable.billede4, 120, 100);
 
         MarkerOptions markerOptions=new MarkerOptions();
         // Set position of marker
@@ -251,11 +235,21 @@ public class MapFragment extends Fragment implements LocationListener {
         // Set title of marker
         markerOptions.title(getString(R.string.userlocation));
         //Add icon
-        //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.download));
+        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(markerUser));
         // Animating to zoom the marker
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(userLocation.getLatitude(),userLocation.getLongitude()),15));
         // Add marker on map
         googleMap.addMarker(markerOptions);
+
+
+    }
+//Ref: Corona tracker demo from class
+    //helper method for generating map icon bitmaps
+    private Bitmap makeMarkerIcon(int drawableId, int height, int width){
+        final BitmapDrawable bitmapDrawable = (BitmapDrawable)ContextCompat.getDrawable(getActivity(), drawableId);
+        final Bitmap bitmap = bitmapDrawable.getBitmap();
+        final Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
+        return scaledBitmap;
     }
 
 
