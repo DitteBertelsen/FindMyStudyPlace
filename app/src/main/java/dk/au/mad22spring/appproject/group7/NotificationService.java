@@ -16,6 +16,7 @@ import androidx.lifecycle.LifecycleService;
 import androidx.lifecycle.Observer;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import dk.au.mad22spring.appproject.group7.models.NotificationModel;
 
@@ -23,15 +24,10 @@ import dk.au.mad22spring.appproject.group7.models.NotificationModel;
 public class NotificationService extends LifecycleService {
 
     private Repository repository;
-    private ExecutorService execService;
-    private LifecycleOwner lifecycleOwner;
+    private ExecutorService executorService;
 
     public NotificationService() {
-    }
-
-    public NotificationService(LifecycleOwner lifecycleOwner) {
         repository = Repository.getInstance();
-        this.lifecycleOwner = lifecycleOwner;
     }
 
    @Override
@@ -39,15 +35,20 @@ public class NotificationService extends LifecycleService {
        super.onStartCommand(intent, flags, startId);
        //Creates a notification channel
        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-           NotificationChannel channel = new NotificationChannel(Constants.SERVICE_CHANNEL, "Find my study place", NotificationManager.IMPORTANCE_LOW);
+           NotificationChannel channel = new NotificationChannel(Constants.SERVICE_CHANNEL, "Find my study place", NotificationManager.IMPORTANCE_HIGH);
            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
            notificationManager.createNotificationChannel(channel);
        }
 
-       repository.getNotifications().observe(lifecycleOwner, new Observer<NotificationModel>() {
+       //NotificationModel m = new NotificationModel();
+       //m.setFriendName("Freja");
+
+       //createNotification(m);
+
+       repository.getNotifications().observe(this, new Observer<NotificationModel>() {
            @Override
            public void onChanged(NotificationModel notification) {
-               notifyWithLocation(notification);
+               createNotification(notification);
            }
        });
 
@@ -55,7 +56,19 @@ public class NotificationService extends LifecycleService {
        return START_STICKY;
    }
 
-    public void notifyWithLocation(NotificationModel notificationObject) {
+   private void createNotification(NotificationModel notificationModel){
+        if (executorService == null) {
+            executorService = Executors.newSingleThreadExecutor();
+        }
+        executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                notifyWithLocation(notificationModel);
+            }
+        });
+   }
+
+    private void notifyWithLocation(NotificationModel notificationObject) {
         //Todo tilføj lille notofications item
         Notification notification = new NotificationCompat.Builder(this, Constants.SERVICE_CHANNEL)
                 .setContentTitle(notificationObject.getFriendName() + " " + getString(R.string.notificationTitle))
@@ -67,11 +80,14 @@ public class NotificationService extends LifecycleService {
         startForeground(Constants.NOTIFICATION_ID, notification);
     }
 
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         super.onBind(intent);
         return null;
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

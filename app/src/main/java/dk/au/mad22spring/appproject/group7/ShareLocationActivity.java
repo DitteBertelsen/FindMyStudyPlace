@@ -82,7 +82,7 @@ public class ShareLocationActivity extends AppCompatActivity implements Location
         btnShareLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String[] tempfriends = txtAddedFriends.toString().split("\n");
+                String[] tempfriends = txtAddedFriends.getText().toString().split("\n");
                 ArrayList<String> friends = new ArrayList<>();
 
                 //Convert from String[] to ArrayList<String>:
@@ -93,9 +93,8 @@ public class ShareLocationActivity extends AppCompatActivity implements Location
                 //Create a NotificationModel:
                 NotificationModel notificationModel = new NotificationModel();
                 notificationModel.setBuilding(edtBuilding.getText().toString());
-                //TODO få Trine til at tilføje lat og long
-
-
+                notificationModel.setFriendLocationLat(userLoca.getLatitude());
+                notificationModel.setFriendLocationLong(userLoca.getLongitude());
                 notificationModel.setComment(edtComment.getText().toString());
 
                 slViewModel.pushNotification(notificationModel, friends);

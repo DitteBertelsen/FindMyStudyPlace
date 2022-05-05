@@ -37,7 +37,7 @@ public class FirebaseConnection {
     private ArrayList<StudyPlace> studyPlaces;
     private MutableLiveData<List<StudyPlace>> mStudyPlaces;
     private MutableLiveData<NotificationModel> mNotificaiton;
-
+    private Boolean hasInitialized = false;
 
     public static FirebaseConnection getInstance()
     {
@@ -176,17 +176,25 @@ public class FirebaseConnection {
        notificationRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Iterable<DataSnapshot> snapshots = dataSnapshot.getChildren();
+                //if(hasInitialized != false) {
+                    Iterable<DataSnapshot> snapshots = dataSnapshot.getChildren();
 
-                NotificationModel tempNoti = new NotificationModel();
+                    NotificationModel tempNoti = new NotificationModel();
 
-                //Overrides the values of NotificationModel until it reaches the last object:
-                while(snapshots.iterator().hasNext()) {
-                    tempNoti = snapshots.iterator().next().getValue(NotificationModel.class);
-                }
+                    //Overrides the values of NotificationModel until it reaches the last object:
+                    while (snapshots.iterator().hasNext()) {
+                        tempNoti = snapshots.iterator().next().getValue(NotificationModel.class);
+                    }
 
-                //Post the last NotificationModel to mutable object:
-                mNotificaiton.postValue(tempNoti);
+                    if (tempNoti.getFriendName() != "") {
+                        //Post the last NotificationModel to mutable object:
+                        mNotificaiton.postValue(tempNoti);
+                    }
+               /* }
+                else {
+                    hasInitialized = true;
+                    return;
+                }*/
             }
 
             @Override
@@ -244,7 +252,7 @@ public class FirebaseConnection {
             for (String friend : friends) {
                 String f = friend.replace(".","");
 
-                studyRef.child(friend).child("/notifications").child(key).setValue(notificationModel);
+                studyRef.child(f).child("/notifications").child(key).setValue(notificationModel);
                 Log.e("DATA", "saveNotification: study place added:" + notificationModel.getFriendName());
             }
 
