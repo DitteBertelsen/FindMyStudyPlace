@@ -25,15 +25,11 @@
         android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/au_passata_bold"
+        android:layout_marginTop="36dp"
         android:text="@string/title"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.098"
-        app:layout_constraintStart_toEndOf="@+id/imgstudyplaceimage"
+        app:layout_constraintStart_toStartOf="@+id/ratbarRating"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -51,20 +47,23 @@
         android:id="@+id/txtType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:fontFamily="@font/au_passata_rg"
         android:text="@string/type"
+        app:layout_constraintStart_toStartOf="@+id/ratbarRating"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/txtTitle"
         app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
 
     <RatingBar
         android:id="@+id/ratbarRating"
-        android:layout_width="237dp"
-        android:layout_height="44dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:contentDescription="@string/ratbarRating"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/txtType"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imgstudyplaceimage"
         app:layout_constraintTop_toBottomOf="@+id/txtType" />
 </androidx.constraintlayout.widget.ConstraintLayout>
