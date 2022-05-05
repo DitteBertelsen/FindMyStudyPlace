@@ -75,7 +75,7 @@ public class MapFragment extends Fragment implements LocationListener {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 map = googleMap;
-                showStudyPlaces(map);
+                //showStudyPlaces(map);
                 // When map is loaded
                 googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
@@ -86,7 +86,6 @@ public class MapFragment extends Fragment implements LocationListener {
                 getLocation();
             }
         });
-
         //Get studyplaces from Viewmodel
         MFViewModel.getStudyPlaces(this).observe(this.getViewLifecycleOwner(), new Observer<List<StudyPlace>>() {
             @Override
@@ -95,7 +94,6 @@ public class MapFragment extends Fragment implements LocationListener {
                 showStudyPlaces(map);
             }
         });
-
         // Return view
         return view;
     }

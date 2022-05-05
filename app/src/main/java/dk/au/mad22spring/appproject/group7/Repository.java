@@ -81,11 +81,11 @@ public class Repository {
     //This method is called to check if there are changes in the study places in the storage:
     public void compareStudyplaces(List<StudyPlace> realtimeList) {
         //Check that both async calls has returned
-        if (storageList.size() != 0 && realtimeList.size() != 0) {
+        if (storageList.size() != 0) {
             //In case a new study place has been added to the storage list:
             for (StudyPlace studyplace: storageList) {
                 //Add the study place if it exists in the storageList but not in db list:
-                if (realtimeList.contains(studyplace.getId())) {
+                if (!realtimeList.contains(studyplace.getId())) {
                     realtimeList.add(studyplace);
                 }
             }
