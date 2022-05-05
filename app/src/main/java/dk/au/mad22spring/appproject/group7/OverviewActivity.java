@@ -140,7 +140,7 @@ public class OverviewActivity extends AppCompatActivity {
                 }
                 else {
                     //add all group places
-                    viewModel.getStudyPlaces(OverviewActivity.this);
+                    viewModel.addGroupPlaces();
                 }
             }
         });

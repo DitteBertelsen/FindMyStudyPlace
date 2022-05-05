@@ -3,7 +3,6 @@ package dk.au.mad22spring.appproject.group7.Fragments;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class StudyPlaceListViewModel extends ViewModel {
     //private MutableLiveData<List<StudyPlace>> shownStudyPlaces;
     private List<StudyPlace> allStudyPlaces;
     private Repository repository;
-    private StudyPlaceType single = StudyPlaceType.Group;
+    private StudyPlaceType studyPlaceType = StudyPlaceType.Group;
     private MediatorLiveData<List<StudyPlace>> shownStudyPlace;
 
     public StudyPlaceListViewModel() {
@@ -39,12 +38,16 @@ public class StudyPlaceListViewModel extends ViewModel {
         shownStudyPlace.addSource(repository.getAllStudyPlaces(), studyPlaceList -> {
             ArrayList<StudyPlace> singles = new ArrayList<>();
 
-            for (StudyPlace studyplace: studyPlaceList) {
+            if (studyPlaceType == StudyPlaceType.Single) {
+                for (StudyPlace studyplace : studyPlaceList) {
 
-                if (studyplace.getType() == single)
-                    singles.add(studyplace);
+                    if (studyplace.getType() == studyPlaceType)
+                        singles.add(studyplace);
+                }
+                shownStudyPlace.postValue(singles);
+            } else {
+                shownStudyPlace.postValue(studyPlaceList);
             }
-            shownStudyPlace.postValue(singles);
         });
         return shownStudyPlace;
     }
@@ -54,7 +57,7 @@ public class StudyPlaceListViewModel extends ViewModel {
     }
 
     public void removeGroupPlaces(){
-        single = StudyPlaceType.Single;
+        studyPlaceType = StudyPlaceType.Single;
 
        repository.poke();
 /*
@@ -70,9 +73,10 @@ public class StudyPlaceListViewModel extends ViewModel {
 */
     }
 
-    /* TODO public void addGroupPlaces() {
-        studyPlaces.postValue(getStudyPlaces().getValue());
-    }*/
+     public void addGroupPlaces() {
+        studyPlaceType = StudyPlaceType.Group;
+        repository.poke();
+    }
 
     public void onUserRatingChanged(StudyPlace studyPlace, double newRating) {
         repository.onUserRatingChanged(studyPlace, newRating);

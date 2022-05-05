@@ -122,23 +122,22 @@ public class Repository {
                         realTimeStudyPlace.setTitle(storageStudyplace.getTitle());
                         realTimeStudyPlace.setStudyPlaceLat(storageStudyplace.getStudyPlaceLat());
                         realTimeStudyPlace.setStudyPlaceLong(storageStudyplace.getStudyPlaceLong());
-                        //Todo update IMage
+                        realTimeStudyPlace.setImage(storageStudyplace.getImage());
                         realTimeStudyPlace.setType(storageStudyplace.getType());
                         realTimeStudyPlace.setProperties(storageStudyplace.getProperties());
 
                         studyplaceHasChanged = true;
                     }
                 }
-
                 if (studyplaceHasChanged) {
                     realtimeList.remove(indexInRealtimeList);
                     realtimeList.add(realTimeStudyPlace);
                 }
             }
-        }
 
-        //Save the updated list in db:
-        firebaseConnection.saveStudyPlaceList(realtimeList);
+            //Save the updated list in db:
+            firebaseConnection.saveStudyPlaceList(realtimeList);
+        }
     }
 
     //When the user rating is changed:
