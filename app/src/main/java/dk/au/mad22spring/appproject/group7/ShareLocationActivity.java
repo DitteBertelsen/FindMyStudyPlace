@@ -64,15 +64,15 @@ public class ShareLocationActivity extends AppCompatActivity {
                     friends.add(friend);
                 }
 
-                //Todo opret NotificationModel:
+                //Create a NotificationModel:
                 NotificationModel notificationModel = new NotificationModel();
                 notificationModel.setBuilding(edtBuilding.getText().toString());
                 //TODO få Trine til at tilføje lat og long
+
+
                 notificationModel.setComment(edtComment.getText().toString());
 
                 slViewModel.pushNotification(notificationModel, friends);
-
-
 
                 setResult(RESULT_OK);
                 finish();
@@ -88,14 +88,14 @@ public class ShareLocationActivity extends AppCompatActivity {
 
                 //TODO Check if email exist in db:
 
+                //if friend email exist in db:
                 if (true) {
                     txtAddedFriends.append(email +"\n");
                 }
-                else{
+                else {
                     Toast.makeText(FMSPApplication.getAppContext(), R.string.txtFriendDoesNotExist, Toast.LENGTH_SHORT);
                 }
             }
         });
-
     }
 }

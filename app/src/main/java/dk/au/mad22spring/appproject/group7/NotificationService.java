@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutorService;
 
 import dk.au.mad22spring.appproject.group7.models.NotificationModel;
 
-//All code in this Foreground-service-class is based on: Services + async processing demo from lesson 5.
+//Most of the code in this Foreground-service-class is based on: Services + async processing demo from lesson 5.
 public class NotificationService extends Service {
 
     private Repository repository;
