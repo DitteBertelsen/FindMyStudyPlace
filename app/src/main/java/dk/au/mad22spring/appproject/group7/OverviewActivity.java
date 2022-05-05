@@ -74,9 +74,10 @@ public class OverviewActivity extends AppCompatActivity {
 
         //startForegroundService();
 
-        //viewModel.CheckForNewStudyplaces(this);
+        viewModel.CheckForNewStudyplaces(this);
     }
 
+    //
     private void startForegroundService() {
         Intent fgIntent = new Intent(this, NotificationService.class);
         startService(fgIntent);
@@ -139,7 +140,7 @@ public class OverviewActivity extends AppCompatActivity {
                 }
                 else {
                     //add all group places
-                    viewModel.getStudyPlaces();
+                    viewModel.getStudyPlaces(OverviewActivity.this);
                 }
             }
         });

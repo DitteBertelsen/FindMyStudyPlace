@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -122,12 +123,16 @@ public class FirebaseConnection {
     }
 
     //MutableLiveData for activities to observe for updates in realtime database
-    public MutableLiveData<List<StudyPlace>> getStudyPlacesRealTimeDb() {
+    public LiveData<List<StudyPlace>> getStudyPlacesRealTimeDb() {
         if(mStudyPlaces == null) {
             mStudyPlaces = new MutableLiveData<>(new ArrayList());
         }
 
         return mStudyPlaces;
+    }
+
+    public void pokeStudyPlaces() {
+        mStudyPlaces.postValue(mStudyPlaces.getValue());
     }
 
     public MutableLiveData<NotificationModel> getNotifications(){

@@ -24,7 +24,7 @@ public class Repository {
     private CloudStorage cloudStorage;
     private FirebaseConnection firebaseConnection;
 
-    private List<StudyPlace> realtimeList;
+    //private List<StudyPlace> realtimeList;
     private ArrayList<StudyPlace> storageList;
 
     //Singleton patten
@@ -51,13 +51,14 @@ public class Repository {
                 firebaseConnection.getStudyPlacesRealTimeDb().observe(lifecycleOwner, new Observer<List<StudyPlace>>() {
                     @Override
                     public void onChanged(List<StudyPlace> studyPlaces) {
+                        List<StudyPlace> realtimeList = new ArrayList<>();
                         if (studyPlaces.size() == 0 ) {
                             realtimeList = storageList;
 
                         }
                         if (storageList.size() != 0) {
                             realtimeList = studyPlaces;
-                            compareStudyplaces();
+                            compareStudyplaces(realtimeList);
                         }
                     }
                 });
@@ -78,36 +79,61 @@ public class Repository {
      */
 
     //This method is called to check if there are changes in the study places in the storage:
-    public void compareStudyplaces() {
+    public void compareStudyplaces(List<StudyPlace> realtimeList) {
         //Check that both async calls has returned
         if (storageList.size() != 0 && realtimeList.size() != 0) {
             //In case a new study place has been added to the storage list:
             for (StudyPlace studyplace: storageList) {
                 //Add the study place if it exists in the storageList but not in db list:
-                if (!realtimeList.contains(studyplace.getId())) {
+                if (realtimeList.contains(studyplace.getId())) {
                     realtimeList.add(studyplace);
                 }
             }
 
+            //Creates a temporary object to collect all items to delete:
+            ArrayList<StudyPlace> itemsToDelete = new ArrayList<>();
+
             //In case a study place has been removed from the storage list:
             for (StudyPlace studyplace: realtimeList) {
                 //Remove the study place if it exists in the db list but not in storageList:
-                if (!storageList.contains(studyplace.getId()))
+                if (storageList.contains(studyplace.getId()))
                 {
-                    realtimeList.remove(studyplace);
+                    itemsToDelete.add(studyplace);
                 }
+            }
+
+            //Deleting the items from realtimeList:
+            for (StudyPlace studyplace: itemsToDelete) {
+                realtimeList.remove(studyplace);
             }
 
             //Update all attributes:
             for (StudyPlace storageStudyplace: storageList) {
-                StudyPlace realTimeStudyPlace = realtimeList.get(realtimeList.indexOf(storageStudyplace.getId()));
+                //Find the matching object of storageStudyPlace i realtimeList:
+                StudyPlace realTimeStudyPlace = new StudyPlace();
+                Boolean studyplaceHasChanged = false;
+                int indexInRealtimeList = -1;
 
-                realTimeStudyPlace.setTitle(storageStudyplace.getTitle());
-                realTimeStudyPlace.setStudyPlaceLat(storageStudyplace.getStudyPlaceLat());
-                realTimeStudyPlace.setStudyPlaceLong(storageStudyplace.getStudyPlaceLong());
-                //Todo update IMage
-                realTimeStudyPlace.setType(storageStudyplace.getType());
-                realTimeStudyPlace.setProperties(storageStudyplace.getProperties());
+                for (StudyPlace studyPlace: realtimeList) {
+                    if (storageStudyplace.getId() == studyPlace.getId()) {
+                        realTimeStudyPlace = studyPlace;
+                        indexInRealtimeList = realtimeList.indexOf(studyPlace);
+
+                        realTimeStudyPlace.setTitle(storageStudyplace.getTitle());
+                        realTimeStudyPlace.setStudyPlaceLat(storageStudyplace.getStudyPlaceLat());
+                        realTimeStudyPlace.setStudyPlaceLong(storageStudyplace.getStudyPlaceLong());
+                        //Todo update IMage
+                        realTimeStudyPlace.setType(storageStudyplace.getType());
+                        realTimeStudyPlace.setProperties(storageStudyplace.getProperties());
+
+                        studyplaceHasChanged = true;
+                    }
+                }
+
+                if (studyplaceHasChanged) {
+                    realtimeList.remove(indexInRealtimeList);
+                    realtimeList.add(realTimeStudyPlace);
+                }
             }
         }
 
@@ -121,7 +147,7 @@ public class Repository {
     }
 
     //Gets all study places from realtime-database
-    public MutableLiveData<List<StudyPlace>> getAllStudyPlaces()
+    public LiveData<List<StudyPlace>> getAllStudyPlaces()
     {
         return firebaseConnection.getStudyPlacesRealTimeDb();
     }
@@ -176,4 +202,7 @@ public class Repository {
         firebaseConnection.LogOut();
     }
 
+    public void poke() {
+        firebaseConnection.pokeStudyPlaces();
+    }
 }
