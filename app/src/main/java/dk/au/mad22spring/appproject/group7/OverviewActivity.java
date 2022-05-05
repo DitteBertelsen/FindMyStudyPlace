@@ -100,7 +100,7 @@ public class OverviewActivity extends AppCompatActivity {
                 // Initialize fragment
                 Fragment mapFragment=new MapFragment();
 
-                // Open fragment
+                // Open Map fragment
                 getSupportFragmentManager()
                         .beginTransaction().replace(R.id.fragList,mapFragment)
                         .commit();
@@ -111,6 +111,7 @@ public class OverviewActivity extends AppCompatActivity {
         btnList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Change fragment to List fragment:
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragList, StudyPlaceListFragment.newInstance())
                         .commitNow();

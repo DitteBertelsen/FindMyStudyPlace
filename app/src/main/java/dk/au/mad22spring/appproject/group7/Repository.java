@@ -63,11 +63,9 @@ public class Repository {
                 });
             }
         });
-
-
-
     }
 
+    //Todo delete?
     //This method is called when an user does not have any study places in db (an user is created):
     /*private void initializeStudyplaces() {
         //if null - hent study places from firestorage:
@@ -83,28 +81,23 @@ public class Repository {
     public void compareStudyplaces() {
         //Check that both async calls has returned
         if (storageList.size() != 0 && realtimeList.size() != 0) {
-
-            //Tjek om der findes nogen locations i storage listen som ikke findes i real time listen
-            //--> tilføj dem til real time listen
             //In case a new study place has been added to the storage list:
             for (StudyPlace studyplace: storageList) {
+                //Add the study place if it exists in the storageList but not in db list:
                 if (!realtimeList.contains(studyplace.getId())) {
                     realtimeList.add(studyplace);
                 }
             }
 
-            //Tjek om der findes nogen locations i real time listen som ikke findes i storage listen
-            //--> fjern dem fram real time listen
             //In case a study place has been removed from the storage list:
             for (StudyPlace studyplace: realtimeList) {
+                //Remove the study place if it exists in the db list but not in storageList:
                 if (!storageList.contains(studyplace.getId()))
                 {
                     realtimeList.remove(studyplace);
                 }
             }
 
-            //For hver location, tjek om der er ændringer i attributterne
-            //--> opdater værdien i real time listen til værdien i storage listen
             //Update all attributes:
             for (StudyPlace storageStudyplace: storageList) {
                 StudyPlace realTimeStudyPlace = realtimeList.get(realtimeList.indexOf(storageStudyplace.getId()));
@@ -116,13 +109,13 @@ public class Repository {
                 realTimeStudyPlace.setType(storageStudyplace.getType());
                 realTimeStudyPlace.setProperties(storageStudyplace.getProperties());
             }
-
         }
 
-        //gem listen i real time db for log in user
-        firebaseConnection.saveStudyPlaceList(storageList);
+        //Save the updated list in db:
+        firebaseConnection.saveStudyPlaceList(realtimeList);
     }
 
+    //When the user rating is changed:
     public void onUserRatingChanged(StudyPlace studyPlace, double newRating) {
         firebaseConnection.onStudyPlaceRatingChanged(studyPlace, newRating);
     }
@@ -133,14 +126,14 @@ public class Repository {
         return firebaseConnection.getStudyPlacesRealTimeDb();
     }
 
-    //Gets notification from realtime database when new a new notification
+    //Gets notification from realtime database when a new notification
     // has been pushed for the given user.
     public MutableLiveData<NotificationModel> getNotifications()
     {
         return firebaseConnection.getNotifications();
     }
 
-    //
+    //When the user has pushed the 'Share Location' button:
     public void pushNotification(NotificationModel notificationModel, ArrayList<String> friends) {
         firebaseConnection.pushNotification(notificationModel, friends);
     }
@@ -150,7 +143,7 @@ public class Repository {
         return firebaseConnection.getCurrentUser();
     }
 
-
+    //Returns true if a user is signed in:
     public MutableLiveData<Boolean> isSignedIn() {
         return firebaseConnection.isSignedIn();
     }
@@ -178,6 +171,7 @@ public class Repository {
         firebaseConnection.onStudyPlaceRatingChanged(studyPlace, newRating);
     }
 
+    //When the user pushes 'Log out' button:
     public void LogOut(){
         firebaseConnection.LogOut();
     }
