@@ -17,6 +17,10 @@ public class StudyPlace {
     @Expose
     private String Title;
 
+    @SerializedName("Image")
+    @Expose
+    private String Image;
+
     @SerializedName("StudyPlaceLat")
     @Expose
     private double StudyPlaceLat;
@@ -94,5 +98,13 @@ public class StudyPlace {
 
     public void setStudyPlaceLong(double studyPlaceLong) {
         StudyPlaceLong = studyPlaceLong;
+    }
+
+    public String getImage() {
+        return Image;
+    }
+
+    public void setImage(String image) {
+        Image = image;
     }
 }

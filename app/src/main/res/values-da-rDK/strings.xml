@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    //Study place list item:
+    <string name="app_name">Find min studieplads</string>
+    <string name="title">Studieplads navn</string>
+    <string name="type">Studieplads type</string>
+    <string name="location">Studieplads lokation</string>
+    <string name="rating">0.0</string>
+
+    //Main:
+    <string name="logIn">Log Ind</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
+    <string name="createnewuser">Opret ny bruger</string>
+    <string name="txtloggedIn"> Logged ind</string>
+    <string name="txtloggedOut">Bruger logged ud</string>
+    <string name="errorInvalidEmail">Angiv venligst gyldig e-mail</string>
+    <string name="errorInvalidPw">Adgangskode skal indholde 8 karakterer</string>
+    <string name="userCreated">Bruger tilføjet</string>
+    <string name="errorUserCreatation">Opret bruger afvist</string>
+    <string name="errorUserSignIn">Forker e-mail og/eller password</string>
+
+    //Overview:
+    <string name="logOut">Log ud</string>
+    <string name="findStudyPlace">Find min studieplads</string>
+    <string name="single">Enmands</string>
+    <string name="map">Kort</string>
+    <string name="userlocation">Brugerlokation</string>
+    <string name="list">Liste</string>
+    <string name="sortBy">Sorter</string>
+    <string name="shareLocation">Del lokation</string>
+    <string name="txtWelcome">Velkommen </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    //Share location:
+    <string name="ShareLocation">Del lokation</string>
+    <string name="Back">Tilbage</string>
+    <string name="FriendsEmail">Venners e-mails</string>
+    <string name="Add">Tilføj</string>
+    <string name="AddFriends">Tilføj venner:</string>
+    <string name="AddedFriends">Tilføjede venner:</string>
+    <string name="AddComment">Tilføj kommentar:</string>
+    <string name="Comments">Kommentarer</string>
+    <string name="txtFriendDoesNotExist">Ven eksisterer ikke</string>
+    <string name="txtSharedLocation">Lokation delt med venner</string>
+    <string name="ratbarRating">Bedømmelsesskala</string>
+    <string name="AddBuilding">Tilføj bygning:</string>
+    <string name="Building">Bygning</string>
+
+    //Notofication:
+    <string name="notificationTitle">har delt din lokation med dig!</string>
+    <string name="notificationText">Bygning:</string>
+</resources>
