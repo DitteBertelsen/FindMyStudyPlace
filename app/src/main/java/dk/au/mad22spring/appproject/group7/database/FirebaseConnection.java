@@ -182,13 +182,9 @@ public class FirebaseConnection {
 
                 //Overrides the values of NotificationModel until it reaches the last object:
                 while(snapshots.iterator().hasNext()) {
-                        tempNoti = snapshots.iterator().next().getValue(NotificationModel.class);
+                    tempNoti = snapshots.iterator().next().getValue(NotificationModel.class);
                 }
 
-                //Todo REMOVE THiS
-                if (mNotificaiton == null) {
-                    mNotificaiton = new MutableLiveData<>();
-                }
                 //Post the last NotificationModel to mutable object:
                 mNotificaiton.postValue(tempNoti);
             }

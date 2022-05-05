@@ -73,7 +73,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         setUpUI();
 
-        //startForegroundService();
+        startForegroundService();
 
         if (!justLoggedIn) {
             justLoggedIn = true;
