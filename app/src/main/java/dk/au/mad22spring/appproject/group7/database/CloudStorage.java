@@ -54,7 +54,7 @@ public class CloudStorage {
         if(mStudyPlaceList == null) {
             mStudyPlaceList = new MutableLiveData<>();
             mStudyPlaceList.setValue(new ArrayList<>());
-            sendRequestUsingVolley("https://firebasestorage.googleapis.com/v0/b/findmystudyplace.appspot.com/o/jsonTestStudyPlaces.txt?alt=media&token=d8eb276e-94b4-452b-bc5d-86e216855f64");
+            sendRequestUsingVolley("https://firebasestorage.googleapis.com/v0/b/findmystudyplace.appspot.com/o/jsonTestStudyPlaces.txt?alt=media&token=532ac28d-c856-4416-bf60-15cd28dfe4c2");
             //sendRequest("jsonTestStudyPlaces.txt");
         }
 
