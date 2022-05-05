@@ -152,13 +152,15 @@ public class FirebaseConnection {
         studyPlaceRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                studyPlaces = new ArrayList<>();
+
                 //Uses the iterator to go through results
                 Iterable<DataSnapshot> snapshots = dataSnapshot.getChildren();
                 while(snapshots.iterator().hasNext()) {
                     studyPlaces.add(snapshots.iterator().next().getValue(StudyPlace.class));
                 }
                 if(studyPlaces.size()>0) {
-                    getStudyPlacesRealTimeDb().postValue(studyPlaces);
+                    mStudyPlaces.postValue(studyPlaces);
                 }
             }
 

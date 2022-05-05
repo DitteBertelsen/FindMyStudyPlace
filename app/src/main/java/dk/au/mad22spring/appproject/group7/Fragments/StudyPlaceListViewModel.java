@@ -14,6 +14,7 @@ import dk.au.mad22spring.appproject.group7.models.StudyPlace;
 
 public class StudyPlaceListViewModel extends ViewModel {
     private MutableLiveData<List<StudyPlace>> studyPlaces;
+    private List<StudyPlace> allStudyPlaces;
     private Repository repository;
 
     public StudyPlaceListViewModel() {
@@ -27,7 +28,8 @@ public class StudyPlaceListViewModel extends ViewModel {
     }
 
     public MutableLiveData<List<StudyPlace>> getStudyPlaces() {
-        return repository.getAllStudyPlaces();
+        studyPlaces = repository.getAllStudyPlaces();
+        return studyPlaces;
     }
 
     public void CheckForNewStudyplaces(LifecycleOwner lifecycleOwner) {
@@ -37,7 +39,7 @@ public class StudyPlaceListViewModel extends ViewModel {
     public void removeGroupPlaces(){
         ArrayList<StudyPlace> singles = new ArrayList<>();
 
-        for (StudyPlace studyplace: studyPlaces.getValue()) {
+        for (StudyPlace studyplace: getStudyPlaces().getValue()) {
 
             if (studyplace.getType() == StudyPlaceType.Single)
             singles.add(studyplace);
@@ -47,7 +49,7 @@ public class StudyPlaceListViewModel extends ViewModel {
     }
 
     public void addGroupPlaces() {
-        studyPlaces = repository.getAllStudyPlaces();
+        studyPlaces.postValue(getStudyPlaces().getValue());
     }
 
     public void onUserRatingChanged(StudyPlace studyPlace, double newRating) {

@@ -5,7 +5,9 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -14,6 +16,8 @@ import androidx.lifecycle.ViewModelProvider;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -112,6 +116,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setupUI() {
+        addLogoToActionBar();
+
         edtEmailAddress = findViewById(R.id.edtEmailAddress);
         edtPassword = findViewById(R.id.edtPassword);
 
@@ -223,5 +229,13 @@ public class LoginActivity extends AppCompatActivity {
                     .hideSoftInputFromWindow(
                             view.getWindowToken(), 0);
         }
+    }
+
+    //This method is based on https://stackoverflow.com/questions/43389066/how-to-set-an-icon-in-title-bar-including-with-name-of-the-app
+    private void addLogoToActionBar() {
+        //Set up actionBar:
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setIcon(R.mipmap.aulogo_hvid);
     }
 }

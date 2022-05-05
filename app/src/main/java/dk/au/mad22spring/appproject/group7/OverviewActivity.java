@@ -132,16 +132,13 @@ public class OverviewActivity extends AppCompatActivity {
         swtSingle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                StudyPlaceListViewModel viewModel = new ViewModelProvider(OverviewActivity.this).get(StudyPlaceListViewModel.class);
-
                 if (b){
-
                     //remove all group places
                     viewModel.removeGroupPlaces();
                 }
                 else {
                     //add all group places
-                    viewModel.addGroupPlaces();
+                    viewModel.getStudyPlaces();
                 }
             }
         });

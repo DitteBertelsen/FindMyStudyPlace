@@ -1,13 +1,13 @@
 <resources>
     //Study place list item:
-    <string name="app_name">Find my study place</string>
+    <string name="app_name">  Find my study place</string>
     <string name="title">Place Title</string>
     <string name="type">Place Type</string>
     <string name="location">Place Location</string>
     <string name="rating">0.0</string>
 
     //Main:
-    <string name="logIn">Log In</string>
+    <string name="logIn">LOG IN</string>
     <string name="email">E-mail</string>
     <string name="password">Password</string>
     <string name="createnewuser">Create new user</string>

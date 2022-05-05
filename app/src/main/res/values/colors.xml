@@ -2,7 +2,7 @@
 <resources>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#283593</color>
-    <color name="purple_700">#1565C0</color>
+    <color name="purple_700">#002546</color>
     <color name="teal_200">#3044B5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
@@ -10,4 +10,5 @@
     <color name="listItemColor">#E4D7D7</color>
     <color name="ic_launcher_background">#AF2121</color>
     <color name="ic_launcher_foreground">#E4D7D7</color>
+    <color name="au_secondary">#5F0030</color>
 </resources>

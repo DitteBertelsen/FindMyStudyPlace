@@ -72,6 +72,8 @@ public class ShareLocationActivity extends AppCompatActivity {
 
                 slViewModel.pushNotification(notificationModel, friends);
 
+
+
                 setResult(RESULT_OK);
                 finish();
             }

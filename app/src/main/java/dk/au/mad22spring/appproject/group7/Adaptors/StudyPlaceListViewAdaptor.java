@@ -16,6 +16,7 @@ import java.util.List;
 import dk.au.mad22spring.appproject.group7.R;
 import dk.au.mad22spring.appproject.group7.models.StudyPlace;
 
+//This class is based on L3, lectures, demo 2
 public class StudyPlaceListViewAdaptor extends RecyclerView.Adapter<StudyPlaceListViewAdaptor.StudyPlaceItemViewHolder>{
 
     private List<StudyPlace> studyPlaces;
@@ -42,7 +43,7 @@ public class StudyPlaceListViewAdaptor extends RecyclerView.Adapter<StudyPlaceLi
 
     @Override
     public void onBindViewHolder(@NonNull StudyPlaceItemViewHolder holder, int position) {
-        //Todo add image, position
+        //Todo add image
         final StudyPlace studyPlace = studyPlaces.get(position);
 
         holder.txtTitle.setText(studyPlace.getTitle());
