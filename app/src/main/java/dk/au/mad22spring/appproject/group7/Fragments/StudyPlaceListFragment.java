@@ -81,15 +81,8 @@ public class StudyPlaceListFragment extends Fragment implements IStudyPlaceClick
     }
 
     @Override
-    public void onUserRatingChanged(StudyPlace studyPlace, float newRating) {
-        studyPlace.setUserRating((double) newRating);
-        try {
-            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            FirebaseDatabase.getInstance().getReference("users/" + userId + "/studyPlaces/").child(""+studyPlace.getId()).setValue(studyPlace);  //update object in Firebase
-        } catch (Exception ex) {
-            Log.e("DATA", "error updating", ex);
-        }
-
+    public void onUserRatingChanged(StudyPlace studyPlace, double newRating) {
+        viewModel.onUserRatingChanged(studyPlace, newRating);
     }
 
 }

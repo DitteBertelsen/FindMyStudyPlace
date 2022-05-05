@@ -1,34 +1,19 @@
 package dk.au.mad22spring.appproject.group7;
 
 import android.app.Activity;
-import android.app.Application;
-import android.content.Context;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import dk.au.mad22spring.appproject.group7.database.CloudStorage;
+import dk.au.mad22spring.appproject.group7.database.FirebaseConnection;
+import dk.au.mad22spring.appproject.group7.models.NotificationModel;
 import dk.au.mad22spring.appproject.group7.models.StudyPlace;
-import dk.au.mad22spring.appproject.group7.models.StudyPlaceList;
 
 public class Repository {
 
@@ -55,37 +40,41 @@ public class Repository {
 
     //Todo how to syncronize??!!
     public void CheckForNewStudyplaces(LifecycleOwner lifecycleOwner){
-        firebaseConnection.getStudyPlacesRealTimeDb().observe(lifecycleOwner, new Observer<List<StudyPlace>>() {
-            @Override
-            public void onChanged(List<StudyPlace> studyPlaces) {
-                if (studyPlaces.size() == 0){
-                    realtimeList = studyPlaces;
-                    initializeStudyplaces();
-               } else {
-                   //compareStudyplaces();
-               }
-            }
-        });
-
         cloudStorage.getStudyPlaceListItems().observe(lifecycleOwner, new Observer<ArrayList<StudyPlace>>() {
             @Override
             public void onChanged(ArrayList<StudyPlace> studyPlaces) {
                 storageList = studyPlaces;
-                if (realtimeList != null){
-                    compareStudyplaces();
-                }
+
+                firebaseConnection.getStudyPlacesRealTimeDb().observe(lifecycleOwner, new Observer<List<StudyPlace>>() {
+                    @Override
+                    public void onChanged(List<StudyPlace> studyPlaces) {
+                        if (studyPlaces.size() == 0 ) {
+                            realtimeList = storageList;
+
+                        }
+                        if (storageList.size() != 0) {
+                            realtimeList = studyPlaces;
+                            compareStudyplaces();
+                        }
+                    }
+                });
             }
         });
+
+
+
     }
 
     //This method is called when an user does not have any study places in db (an user is created):
-    private void initializeStudyplaces() {
+    /*private void initializeStudyplaces() {
         //if null - hent study places from firestorage:
-        realtimeList = cloudStorage.getStudyPlaceListItems().getValue();
+        //realtimeList = cloudStorage.getStudyPlaceListItems().getValue();
 
         //gem i real time db for log in user
         firebaseConnection.saveStudyPlaceList(realtimeList);
     }
+
+     */
 
     //This method is called to check if there are changes in the study places in the storage:
     public void compareStudyplaces() {
@@ -131,10 +120,22 @@ public class Repository {
         firebaseConnection.saveStudyPlaceList(storageList);
     }
 
+    public void onUserRatingChanged(StudyPlace studyPlace, double newRating) {
+        firebaseConnection.onStudyPlaceRatingChanged(studyPlace, newRating);
+    }
 
     public MutableLiveData<List<StudyPlace>> getAllStudyPlaces()
     {
         return firebaseConnection.getStudyPlacesRealTimeDb();
+    }
+
+    public MutableLiveData<NotificationModel> getNotifications()
+    {
+        return firebaseConnection.getNotifications();
+    }
+
+    public void pushNotification(NotificationModel notificationModel, ArrayList<String> friends) {
+        firebaseConnection.pushNotification(notificationModel, friends);
     }
 
     public String getCurrentUser() {

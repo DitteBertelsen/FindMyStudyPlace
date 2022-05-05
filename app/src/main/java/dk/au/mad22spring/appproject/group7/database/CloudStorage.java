@@ -1,4 +1,4 @@
-package dk.au.mad22spring.appproject.group7;
+package dk.au.mad22spring.appproject.group7.database;
 
 import android.util.Log;
 
@@ -13,8 +13,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StreamDownloadTask;
@@ -23,6 +21,8 @@ import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 
+import dk.au.mad22spring.appproject.group7.Constants;
+import dk.au.mad22spring.appproject.group7.FMSPApplication;
 import dk.au.mad22spring.appproject.group7.models.StudyPlace;
 import dk.au.mad22spring.appproject.group7.models.StudyPlaceList;
 
@@ -54,8 +54,7 @@ public class CloudStorage {
         if(mStudyPlaceList == null) {
             mStudyPlaceList = new MutableLiveData<>();
             mStudyPlaceList.setValue(new ArrayList<>());
-            sendRequestUsingVolley("https://firebasestorage.googleapis.com/v0/b/findmystudyplace.appspot.com/o/jsonTestStudyPlaces.txt?alt=media&token=334062b4-e595-4f48-8438-68416bef56eb&fbclid=IwAR1mTrXuafUx6ZW8ccd2uoxCq7zP3OgOleTo6G3SRv-57ezKBe_J2cN-s5k");
-
+            sendRequestUsingVolley("https://firebasestorage.googleapis.com/v0/b/findmystudyplace.appspot.com/o/jsonTestStudyPlaces.txt?alt=media&token=d8eb276e-94b4-452b-bc5d-86e216855f64");
             //sendRequest("jsonTestStudyPlaces.txt");
         }
 

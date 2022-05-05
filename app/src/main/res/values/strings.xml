@@ -44,6 +44,11 @@
     <string name="txtFriendDoesNotExist">Friend Does Not Exist...</string>
     <string name="txtSharedLocation">Location shared with friends</string>
     <string name="ratbarRating">RatingBar</string>
+    <string name="AddBuilding">Add Building:</string>
+    <string name="Building">Building</string>
 
+    //Notofication:
+    <string name="notificationTitle">has shared their location with you!</string>
+    <string name="notificationText">Building:</string>
 
 </resources>

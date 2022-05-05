@@ -1,6 +1,7 @@
 package dk.au.mad22spring.appproject.group7;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,21 +13,36 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import dk.au.mad22spring.appproject.group7.models.NotificationModel;
+import dk.au.mad22spring.appproject.group7.viewModels.ShareLocationViewModel;
+
 public class ShareLocationActivity extends AppCompatActivity {
 
     Button btnBack, btnShareLocation, btnAdd;
-    EditText edtFriendEmail, edtComment;
+    EditText edtFriendEmail, edtBuilding,edtComment;
     TextView txtAddedFriends;
+    private ShareLocationViewModel slViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_location);
 
+        slViewModel = new ViewModelProvider(this).get(ShareLocationViewModel.class);
+
         setUpUI();
     }
 
     private void setUpUI() {
+        edtBuilding = findViewById(R.id.edtBuilding);
+        edtComment = findViewById(R.id.edtComment);
+        edtFriendEmail = findViewById(R.id.edtFriendEmail);
+
+        txtAddedFriends = findViewById(R.id.txtAddedFriends);
+
         btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,9 +56,21 @@ public class ShareLocationActivity extends AppCompatActivity {
         btnShareLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String[] friends = txtAddedFriends.toString().split("\n");
+                String[] tempfriends = txtAddedFriends.toString().split("\n");
+                ArrayList<String> friends = new ArrayList<>();
 
-                //Todo Share location...
+                //Convert from String[] to ArrayList<String>:
+                for (String friend : tempfriends) {
+                    friends.add(friend);
+                }
+
+                //Todo opret NotificationModel:
+                NotificationModel notificationModel = new NotificationModel();
+                notificationModel.setBuilding(edtBuilding.getText().toString());
+                //TODO få Trine til at tilføje lat og long
+                notificationModel.setComment(edtComment.getText().toString());
+
+                slViewModel.pushNotification(notificationModel, friends);
 
                 setResult(RESULT_OK);
                 finish();
@@ -59,7 +87,7 @@ public class ShareLocationActivity extends AppCompatActivity {
                 //TODO Check if email exist in db:
 
                 if (true) {
-                    txtAddedFriends.append("\n" + email);
+                    txtAddedFriends.append(email +"\n");
                 }
                 else{
                     Toast.makeText(FMSPApplication.getAppContext(), R.string.txtFriendDoesNotExist, Toast.LENGTH_SHORT);
@@ -67,9 +95,5 @@ public class ShareLocationActivity extends AppCompatActivity {
             }
         });
 
-        edtComment = findViewById(R.id.edtComment);
-        edtFriendEmail = findViewById(R.id.edtFriendEmail);
-
-        txtAddedFriends = findViewById(R.id.txtAddedFriends);
     }
 }

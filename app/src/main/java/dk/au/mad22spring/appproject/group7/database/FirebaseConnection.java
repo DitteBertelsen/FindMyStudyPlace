@@ -1,19 +1,15 @@
-package dk.au.mad22spring.appproject.group7;
+package dk.au.mad22spring.appproject.group7.database;
 
 import android.app.Activity;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,6 +19,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import dk.au.mad22spring.appproject.group7.Constants;
+import dk.au.mad22spring.appproject.group7.models.NotificationModel;
 import dk.au.mad22spring.appproject.group7.models.StudyPlace;
 
 public class FirebaseConnection {
@@ -38,6 +36,7 @@ public class FirebaseConnection {
     private ArrayList<StudyPlace> studyPlaces;
     //private List<StudyPlace> studyPlaces;
     private MutableLiveData<List<StudyPlace>> mStudyPlaces;
+    private MutableLiveData<NotificationModel> mNotificaiton;
 
 
     public static FirebaseConnection getInstance()
@@ -111,8 +110,6 @@ public class FirebaseConnection {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d(Constants.TAG_MAIN, "onComplete: Created User");
-                            //Todo delete?
-                            database.getReference().child("users").setValue(auth.getCurrentUser().getUid());
                             isUserCreated.postValue(true);
                         } else {
                             Log.d(Constants.TAG_MAIN, "onComplete: Failed to create user", task.getException());
@@ -133,15 +130,26 @@ public class FirebaseConnection {
         return mStudyPlaces;
     }
 
+    public MutableLiveData<NotificationModel> getNotifications(){
+        if (mNotificaiton == null) {
+            mNotificaiton = new MutableLiveData<>();
+        }
+        return  mNotificaiton;
+    }
+
     //Method created based on the Demo2 from lesson 10: WorldMan
     //sets up a Firebase listener for the list of StudyPlaces
     private void setupFirebaseListener() {
-        //TODO get the userId from the repository instead
+        //TODO vi har ændret userId (getUid) til userName - se om det skaber problemer
+        String userEmail = auth.getCurrentUser().getEmail();
+        String userName = userEmail.replace(".", "");
         String userId = auth.getCurrentUser().getUid();
-        DatabaseReference refDB = database.getReference("users/" + userId + "/studyplaces");
+
+        DatabaseReference studyPlaceRef = database.getReference("users/" + userId + "/studyplaces");
+        //DatabaseReference studyPlaceRef = database.getReference("users/" + userName + "/studyplaces");
 
         //Listener listening for changes in the database
-        refDB.addValueEventListener(new ValueEventListener() {
+        studyPlaceRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //Uses the iterator to go through results
@@ -156,38 +164,87 @@ public class FirebaseConnection {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("DATA", "onCancelled: Failed to read values", error.toException());
+                Log.w("DATA", "onCancelled: Failed to read study place values", error.toException());
             }
         });
 
+       DatabaseReference notificationRef = database.getReference("users/" + userName + "/notifications");
+       notificationRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> snapshots = dataSnapshot.getChildren();
+
+                NotificationModel tempNoti = new NotificationModel();
+
+                //Overrides the values of NotificationModel until it reaches the last object:
+                while(snapshots.iterator().hasNext()) {
+                        tempNoti = snapshots.iterator().next().getValue(NotificationModel.class);
+                }
+
+                //Todo REMOVE THiS
+                if (mNotificaiton == null) {
+                    mNotificaiton = new MutableLiveData<>();
+                }
+                //Post the last NotificationModel to mutable object:
+                mNotificaiton.postValue(tempNoti);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("DATA", "onCancelled: Failed to read notification values", error.toException());
+            }
+        });
     }
 
     //Method created based on the Demo2 from lesson 10: WorldMan
     public void onStudyPlaceRatingChanged(StudyPlace studyPlace, double newRating){
         studyPlace.setUserRating(newRating);
         try {
+            String userEmail = auth.getCurrentUser().getEmail();
+            String userName = userEmail.replace(".", "");
             String userId = auth.getCurrentUser().getUid();
 
-            DatabaseReference refPlaces = database.getReference("users/" + userId + "/studyPlaces");   //reference to list of study places
-            String key = refPlaces.push().getKey(); //push adds new element in list - save key for easy update of objects
-
-            refPlaces.child(key).setValue(studyPlace);
-
+            //database.getReference("users/" + userName + "/studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);  //update
+            database.getReference("users/" + userId + "/studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);  //update object in Firebase
         } catch (Exception ex) {
             Log.e("DATA", "onStudyPlaceRatingChanged: Error updating user rating", ex);
         }
     }
 
+    //Method created based on the Demo2 from lesson 10: WorldMan
     public void saveStudyPlaceList(List<StudyPlace> studyPlaceList) {
-        //TODO test save
         try {
+            String userEmail = auth.getCurrentUser().getEmail();
+            String userName = userEmail.replace(".", "");
             String userId = auth.getCurrentUser().getUid();
+
             DatabaseReference studyRef = database.getReference("users");
 
             for (StudyPlace studyPlace: studyPlaceList) {
-                String key = studyRef.push().getKey();
-                studyRef.child(userId).child("studyplaces").child(key).setValue(studyPlace);
+                //studyRef.child(userName).child("studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);
+                studyRef.child(userId).child("studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);
                 Log.e("DATA", "saveStudyPlaceList: study place added:" + studyPlace.getTitle());
+            }
+
+        } catch (Exception ex) {
+            Log.e("DATA", "saveStudyPlaceList: Error saving user study places", ex);
+        }
+    }
+
+    public void pushNotification(NotificationModel notificationModel, ArrayList<String> friends) {
+
+        notificationModel.setFriendName(auth.getCurrentUser().getEmail());
+        try {
+            String userId = auth.getCurrentUser().getUid();
+            DatabaseReference studyRef = database.getReference("users/");
+
+            String key = studyRef.push().getKey(); //push adds new element in list
+
+            for (String friend : friends) {
+                String f = friend.replace(".","");
+
+                studyRef.child(friend).child("/notifications").child(key).setValue(notificationModel);
+                Log.e("DATA", "saveNotification: study place added:" + notificationModel.getFriendName());
             }
 
         } catch (Exception ex) {

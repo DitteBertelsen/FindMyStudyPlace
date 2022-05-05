@@ -86,10 +86,11 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="60dp"
         android:text="@string/AddComment"
         app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/txtAddedFriends" />
+        app:layout_constraintTop_toBottomOf="@+id/edtBuilding" />
 
     <EditText
         android:id="@+id/edtComment"
@@ -122,4 +123,26 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.85" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="@string/AddBuilding"
+        app:layout_constraintStart_toStartOf="@+id/txtAddedFriends"
+        app:layout_constraintTop_toBottomOf="@+id/txtAddedFriends" />
+
+    <EditText
+        android:id="@+id/edtBuilding"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/Building"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="@+id/txtAddedFriends"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView7"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
 </androidx.constraintlayout.widget.ConstraintLayout>

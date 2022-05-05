@@ -50,6 +50,10 @@ public class StudyPlaceListViewModel extends ViewModel {
         studyPlaces = repository.getAllStudyPlaces();
     }
 
+    public void onUserRatingChanged(StudyPlace studyPlace, double newRating) {
+        repository.onUserRatingChanged(studyPlace, newRating);
+    }
+
     public void LogOut() {
         repository.LogOut();
     }
