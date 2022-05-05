@@ -150,8 +150,8 @@ public class FirebaseConnection {
         String userName = userEmail.replace(".", "");
         String userId = auth.getCurrentUser().getUid();
 
-        DatabaseReference studyPlaceRef = database.getReference("users/" + userId + "/studyplaces");
-        //DatabaseReference studyPlaceRef = database.getReference("users/" + userName + "/studyplaces");
+        //DatabaseReference studyPlaceRef = database.getReference("users/" + userId + "/studyplaces");
+        DatabaseReference studyPlaceRef = database.getReference("users/" + userName + "/studyplaces");
 
         //Listener listening for changes in the database
         studyPlaceRef.addValueEventListener(new ValueEventListener() {
@@ -207,12 +207,13 @@ public class FirebaseConnection {
     public void onStudyPlaceRatingChanged(StudyPlace studyPlace, double newRating){
         studyPlace.setUserRating(newRating);
         try {
+            //Todo id hvis det virker
             String userEmail = auth.getCurrentUser().getEmail();
             String userName = userEmail.replace(".", "");
             String userId = auth.getCurrentUser().getUid();
 
-            //database.getReference("users/" + userName + "/studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);  //update
-            database.getReference("users/" + userId + "/studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);  //update object in Firebase
+            database.getReference("users/" + userName + "/studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);  //update
+            //database.getReference("users/" + userId + "/studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);  //update object in Firebase
         } catch (Exception ex) {
             Log.e("DATA", "onStudyPlaceRatingChanged: Error updating user rating", ex);
         }
@@ -221,6 +222,7 @@ public class FirebaseConnection {
     //Method created based on the Demo2 from lesson 10: WorldMan
     public void saveStudyPlaceList(List<StudyPlace> studyPlaceList) {
         try {
+            //Todo id hvis det virker
             String userEmail = auth.getCurrentUser().getEmail();
             String userName = userEmail.replace(".", "");
             String userId = auth.getCurrentUser().getUid();
@@ -228,8 +230,8 @@ public class FirebaseConnection {
             DatabaseReference studyRef = database.getReference("users");
 
             for (StudyPlace studyPlace: studyPlaceList) {
-                //studyRef.child(userName).child("studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);
-                studyRef.child(userId).child("studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);
+                studyRef.child(userName).child("studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);
+                //studyRef.child(userId).child("studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);
                 Log.e("DATA", "saveStudyPlaceList: study place added:" + studyPlace.getTitle());
             }
 
