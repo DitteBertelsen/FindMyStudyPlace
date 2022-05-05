@@ -17,14 +17,17 @@ import dk.au.mad22spring.appproject.group7.models.StudyPlace;
 
 public class Repository {
 
+    //Instance for Singleton pattern
     private static Repository instance;
 
+    //Firebase classes
     private CloudStorage cloudStorage;
     private FirebaseConnection firebaseConnection;
 
     private List<StudyPlace> realtimeList;
     private ArrayList<StudyPlace> storageList;
 
+    //Singleton patten
     public static Repository getInstance()
     {
         if(instance == null){
@@ -124,28 +127,35 @@ public class Repository {
         firebaseConnection.onStudyPlaceRatingChanged(studyPlace, newRating);
     }
 
+    //Gets all study places from realtime-database
     public MutableLiveData<List<StudyPlace>> getAllStudyPlaces()
     {
         return firebaseConnection.getStudyPlacesRealTimeDb();
     }
 
+    //Gets notification from realtime database when new a new notification
+    // has been pushed for the given user.
     public MutableLiveData<NotificationModel> getNotifications()
     {
         return firebaseConnection.getNotifications();
     }
 
+    //
     public void pushNotification(NotificationModel notificationModel, ArrayList<String> friends) {
         firebaseConnection.pushNotification(notificationModel, friends);
     }
 
+    //Gets the current user through firebase-connection
     public String getCurrentUser() {
         return firebaseConnection.getCurrentUser();
     }
+
 
     public MutableLiveData<Boolean> isSignedIn() {
         return firebaseConnection.isSignedIn();
     }
 
+    //Validates login-information through firebase-connection
     public void SignIn(String email, String password, Activity activity){
         firebaseConnection.SignIn(email,password,activity);
     }
