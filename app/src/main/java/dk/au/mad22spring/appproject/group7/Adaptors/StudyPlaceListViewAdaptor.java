@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +69,10 @@ public class StudyPlaceListViewAdaptor extends RecyclerView.Adapter<StudyPlaceLi
                 }
             }
         });
+        Glide.with(holder.imgIcon.getContext())
+                .load(studyPlace.getImage() !=null ? studyPlaces.get(position).getImage() : "https://www.svgrepo.com/download/3404/triangular-flag.svg")
+                .into(holder.imgIcon);
+
     }
 
     @Override
