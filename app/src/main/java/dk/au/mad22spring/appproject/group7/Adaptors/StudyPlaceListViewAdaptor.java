@@ -46,7 +46,15 @@ public class StudyPlaceListViewAdaptor extends RecyclerView.Adapter<StudyPlaceLi
         final StudyPlace studyPlace = studyPlaces.get(position);
 
         holder.txtTitle.setText(studyPlace.getTitle());
-        holder.txtType.setText(studyPlace.getType().toString());
+        String type = studyPlace.getType().toString();
+        if(type == "Single")
+        {
+            holder.txtType.setText(R.string.txtSingleGroup);
+        }
+        else{
+            holder.txtType.setText(R.string.txtGroup);
+        }
+
         holder.txtRating.setText(studyPlace.getUserRating().toString());
         holder.ratbarRating.setRating(studyPlace.getUserRating().floatValue());
         holder.ratbarRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
