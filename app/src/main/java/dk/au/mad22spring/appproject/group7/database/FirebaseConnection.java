@@ -186,7 +186,7 @@ public class FirebaseConnection {
                         tempNoti = snapshots.iterator().next().getValue(NotificationModel.class);
                     }
 
-                    if (tempNoti.getFriendName() != "") {
+                    if (tempNoti.getFriendName() != null) {
                         //Post the last NotificationModel to mutable object:
                         mNotificaiton.postValue(tempNoti);
                     }
