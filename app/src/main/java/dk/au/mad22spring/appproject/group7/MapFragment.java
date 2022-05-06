@@ -47,6 +47,7 @@ public class MapFragment extends Fragment implements LocationListener {
     public String bestProvider;
     public Bitmap markerUser;
     public Bitmap markerStudyPlace;
+    public Location userLocation;
 
 
     @Override
@@ -138,6 +139,9 @@ public class MapFragment extends Fragment implements LocationListener {
             return;
         }
         map.clear();
+        if(!(userLocation==null)){
+            showUser(map,userLocation);
+        }
 
         StudyPlace studyPlace;
 
@@ -156,7 +160,7 @@ public class MapFragment extends Fragment implements LocationListener {
             //Add icon
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(markerStudyPlace));
             // Animating to zoom the marker
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(studyPlace.getStudyPlaceLat(), studyPlace.getStudyPlaceLong()), 15));
+            //googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(studyPlace.getStudyPlaceLat(), studyPlace.getStudyPlaceLong()),0));
             // Add marker on map
             googleMap.addMarker(markerOptions);
 
@@ -186,7 +190,7 @@ public class MapFragment extends Fragment implements LocationListener {
     public void onLocationChanged(@NonNull Location location) {
         //remove location callback:
         locationManager.removeUpdates(this);
-
+        userLocation=location;
         showUser(map,location);
     }
 
