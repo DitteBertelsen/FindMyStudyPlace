@@ -54,8 +54,7 @@ public class CloudStorage {
         if(mStudyPlaceList == null) {
             mStudyPlaceList = new MutableLiveData<>();
             mStudyPlaceList.setValue(new ArrayList<>());
-            sendRequestUsingVolley("https://firebasestorage.googleapis.com/v0/b/findmystudyplace.appspot.com/o/jsonTestStudyPlaces.txt?alt=media&token=532ac28d-c856-4416-bf60-15cd28dfe4c2");
-            //sendRequest("jsonTestStudyPlaces.txt");
+            sendRequestUsingVolley("https://firebasestorage.googleapis.com/v0/b/findmystudyplace.appspot.com/o/jsonTestStudyPlacesV2.txt?alt=media&token=103e998d-cfab-40e0-8cb2-2279745419f9");
         }
 
         /*//Todo remove temp. data

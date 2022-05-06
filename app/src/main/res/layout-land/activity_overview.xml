@@ -8,16 +8,17 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/au_passata_bold"
         android:text="@string/findStudyPlace"
         android:textSize="24sp"
-        android:fontFamily="@font/au_passata_bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogOut" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnLogOut"
@@ -38,55 +39,37 @@
         android:fontFamily="@font/au_passata_bold"
         app:layout_constraintGuide_percent="0.15" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:fontFamily="@font/au_passata_bold"
-        app:layout_constraintGuide_percent="0.3" />
-
     <Switch
         android:id="@+id/swtSingle"
         android:layout_width="120dp"
         android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:text="@string/single"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/au_passata_bold"
-        app:layout_constraintBottom_toTopOf="@+id/guideline3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+        android:text="@string/single"
+        app:layout_constraintStart_toStartOf="@+id/btnMap"
+        app:layout_constraintTop_toBottomOf="@+id/btnMap" />
 
     <Button
         android:id="@+id/btnList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:text="@string/list"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
         android:fontFamily="@font/au_passata_bold"
-        app:layout_constraintStart_toEndOf="@+id/btnMap"
-        app:layout_constraintTop_toTopOf="@+id/btnMap" />
+        android:text="@string/list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <Button
         android:id="@+id/btnMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/au_passata_bold"
         android:text="@string/map"
-        android:fontFamily="@font/au_passata_bold"
-        app:layout_constraintStart_toEndOf="@+id/fragList"
-        app:layout_constraintTop_toTopOf="@+id/guideline3" />
-
-    <Button
-        android:id="@+id/btnSort"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="4dp"
-        android:text="@string/sortBy"
-        android:fontFamily="@font/au_passata_bold"
-        app:layout_constraintStart_toEndOf="@+id/swtSingle"
-        app:layout_constraintTop_toTopOf="@+id/swtSingle" />
+        app:layout_constraintEnd_toStartOf="@+id/btnList"
+        app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
@@ -116,6 +99,6 @@
         android:fontFamily="@font/au_passata_bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="@+id/guideline2"
         tools:layout="@layout/study_place_list_fragment" />
 </androidx.constraintlayout.widget.ConstraintLayout>
