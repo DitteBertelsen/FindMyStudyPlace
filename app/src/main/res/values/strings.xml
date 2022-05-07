@@ -31,6 +31,7 @@
     <string name="txtWelcome">Welcome </string>
     <string name="txtSingleGroup">Single and group</string>
     <string name="txtGroup">Group</string>
+    <string name="errorLoadingStudyPlaces">Unable to load study places...</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

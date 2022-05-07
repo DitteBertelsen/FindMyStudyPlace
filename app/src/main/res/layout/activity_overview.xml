@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OverviewActivity">
+    tools:context=".activities.OverviewActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -97,7 +97,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragList"
-        android:name="dk.au.mad22spring.appproject.group7.Fragments.StudyPlaceListFragment"
+        android:name="dk.au.mad22spring.appproject.group7.fragments.StudyPlaceListFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
@@ -105,4 +105,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline3"
         tools:layout="@layout/study_place_list_fragment" />
+
+    <ProgressBar
+        android:id="@+id/prgbOverview"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="208dp"
+        android:layout_height="270dp"
+        android:indeterminateTint="@color/au_secondary"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/fragList"
+        app:layout_constraintTop_toTopOf="@+id/fragList" />
 </androidx.constraintlayout.widget.ConstraintLayout>

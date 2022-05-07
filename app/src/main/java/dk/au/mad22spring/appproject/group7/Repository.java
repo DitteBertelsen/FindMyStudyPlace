@@ -81,6 +81,10 @@ public class Repository {
         return firebaseConnection.getStudyPlacesRealTimeDb();
     }
 
+    public LiveData<Boolean> getIsStudyPlacesLoaded() {
+        return firebaseConnection.getIsStudyPlacesLoaded();
+    }
+
     //Check if there has been made changes to the study places in the storage file:
     public void CheckForNewStudyplaces(LifecycleOwner lifecycleOwner) {
         cloudStorage.getStudyPlaceListItems().observe(lifecycleOwner, new Observer<ArrayList<StudyPlace>>() {

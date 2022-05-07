@@ -1,38 +1,29 @@
-package dk.au.mad22spring.appproject.group7;
+package dk.au.mad22spring.appproject.group7.activities;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.BoringLayout;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-
-import dk.au.mad22spring.appproject.group7.Adaptors.StudyPlaceListViewAdaptor;
-import dk.au.mad22spring.appproject.group7.Fragments.StudyPlaceListFragment;
-import dk.au.mad22spring.appproject.group7.Fragments.StudyPlaceListViewModel;
-import dk.au.mad22spring.appproject.group7.models.StudyPlace;
+import dk.au.mad22spring.appproject.group7.FMSPApplication;
+import dk.au.mad22spring.appproject.group7.fragments.MapFragment;
+import dk.au.mad22spring.appproject.group7.fragments.StudyPlaceListFragment;
+import dk.au.mad22spring.appproject.group7.services.NotificationService;
+import dk.au.mad22spring.appproject.group7.R;
+import dk.au.mad22spring.appproject.group7.viewModels.StudyPlaceListViewModel;
 
 public class OverviewActivity extends AppCompatActivity {
 
@@ -42,8 +33,8 @@ public class OverviewActivity extends AppCompatActivity {
     private Button btnList;
     private Button btnShareLocation;
     private Switch swtSingle;
+    private ProgressBar prgbOverview;
 
-    private Boolean justLoggedIn = false;
     private StudyPlaceListViewModel viewModel;
     private ActivityResultLauncher<Intent> shareLocationLauncher;
 
@@ -73,13 +64,21 @@ public class OverviewActivity extends AppCompatActivity {
         //Start foreground service to listen on new notifications:
         startForegroundService();
 
-        //Only check for new study places when the user just logged in:
-        if (!justLoggedIn) {
-            justLoggedIn = true;
-            viewModel.CheckForNewStudyplaces(this);
-        }
+        viewModel.CheckForNewStudyplaces(this);
+
+        viewModel.getIsStudyPlacesLoaded().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean result) {
+                prgbOverview.setVisibility(View.GONE);
+
+                if (!result) {
+                    Toast.makeText(FMSPApplication.getAppContext(), R.string.errorLoadingStudyPlaces, Toast.LENGTH_SHORT);
+                }
+            }
+        });
     }
 
+    //Start listening on incomming notifications:
     private void startForegroundService() {
         Intent fgIntent = new Intent(this, NotificationService.class);
         startService(fgIntent);
@@ -90,7 +89,6 @@ public class OverviewActivity extends AppCompatActivity {
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                justLoggedIn = false;
                 viewModel.LogOut();
                 setResult(RESULT_OK);
                 finish();
@@ -147,5 +145,8 @@ public class OverviewActivity extends AppCompatActivity {
                 }
             }
         });
+
+        prgbOverview = findViewById(R.id.prgbOverview);
+        prgbOverview.setVisibility(View.VISIBLE);
     }
 }

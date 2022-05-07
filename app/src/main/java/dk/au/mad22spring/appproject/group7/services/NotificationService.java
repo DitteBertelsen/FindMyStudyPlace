@@ -1,4 +1,4 @@
-package dk.au.mad22spring.appproject.group7;
+package dk.au.mad22spring.appproject.group7.services;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -19,6 +19,9 @@ import androidx.lifecycle.Observer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import dk.au.mad22spring.appproject.group7.Constants;
+import dk.au.mad22spring.appproject.group7.R;
+import dk.au.mad22spring.appproject.group7.Repository;
 import dk.au.mad22spring.appproject.group7.models.NotificationModel;
 
 //Most of the code in this Foreground-service-class is based on: Services + async processing demo from lesson 5.

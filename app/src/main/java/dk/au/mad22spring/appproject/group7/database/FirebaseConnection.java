@@ -33,6 +33,7 @@ public class FirebaseConnection {
     private MutableLiveData<Boolean> isUserCreated;
     private MutableLiveData<Boolean> isUserSignedIn;
     private MutableLiveData<Boolean> isNotificationsAdded;
+    private MutableLiveData<Boolean> isStudyPlacesLoaded;
 
     //Set up database
     private ArrayList<StudyPlace> studyPlaces;
@@ -149,12 +150,14 @@ public class FirebaseConnection {
                     studyPlaces.add(snapshots.iterator().next().getValue(StudyPlace.class));
                 }
                 if(studyPlaces.size()>0) {
+                    isStudyPlacesLoaded.postValue(true);
                     mStudyPlaces.postValue(studyPlaces);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                isStudyPlacesLoaded.postValue(false);
                 Log.w("DATA", "onCancelled: Failed to read study place values", error.toException());
             }
         });
@@ -190,13 +193,20 @@ public class FirebaseConnection {
 
 //STUDY PLACES:
 
-    //MutableLiveData for activities to observe for updates in realtime database
+    //LiveData for activities to observe for updates in realtime database
     public LiveData<List<StudyPlace>> getStudyPlacesRealTimeDb() {
         if(mStudyPlaces == null) {
             mStudyPlaces = new MutableLiveData<>(new ArrayList());
         }
 
         return mStudyPlaces;
+    }
+
+    public LiveData<Boolean> getIsStudyPlacesLoaded() {
+        if (isStudyPlacesLoaded == null) {
+            isStudyPlacesLoaded = new MutableLiveData<>();
+        }
+        return  isStudyPlacesLoaded;
     }
 
     //This method is used to invoke observers on mStudyPlaces:

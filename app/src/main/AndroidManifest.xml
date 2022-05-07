@@ -23,22 +23,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FindMyStudyPlace">
         <activity
-            android:name=".ShareLocationActivity"
+            android:name=".activities.ShareLocationActivity"
             android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAVzRSiUQ9RKMfLptAunNBzr-T0v8ZWmJA" />
 
-        <service android:name=".NotificationService"
+        <service android:name=".services.NotificationService"
                 android:enabled="true"
             android:exported="false"/>
 
         <activity
-            android:name=".OverviewActivity"
+            android:name=".activities.OverviewActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

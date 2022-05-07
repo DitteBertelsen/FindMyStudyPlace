@@ -1,4 +1,4 @@
-package dk.au.mad22spring.appproject.group7;
+package dk.au.mad22spring.appproject.group7.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +33,8 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+import dk.au.mad22spring.appproject.group7.FMSPApplication;
+import dk.au.mad22spring.appproject.group7.R;
 import dk.au.mad22spring.appproject.group7.models.NotificationModel;
 import dk.au.mad22spring.appproject.group7.viewModels.ShareLocationViewModel;
 
@@ -72,11 +74,12 @@ public class ShareLocationActivity extends AppCompatActivity implements Location
             @Override
             public void onChanged(Boolean result) {
                 prgbShareLoca.setVisibility(View.GONE);
+
                 if (result) {
                     setResult(RESULT_OK);
                     finish();
                 } else {
-
+                    Toast.makeText(FMSPApplication.getAppContext(), getText(R.string.errorPushingNotification), Toast.LENGTH_SHORT);
                 }
             }
         });

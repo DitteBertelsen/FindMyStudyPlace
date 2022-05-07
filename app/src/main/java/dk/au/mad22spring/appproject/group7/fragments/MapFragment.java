@@ -1,4 +1,4 @@
-package dk.au.mad22spring.appproject.group7;
+package dk.au.mad22spring.appproject.group7.fragments;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -32,7 +32,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
-import dk.au.mad22spring.appproject.group7.Fragments.StudyPlaceListViewModel;
+import dk.au.mad22spring.appproject.group7.FMSPApplication;
+import dk.au.mad22spring.appproject.group7.R;
+import dk.au.mad22spring.appproject.group7.viewModels.StudyPlaceListViewModel;
 import dk.au.mad22spring.appproject.group7.models.StudyPlace;
 
 //ref: https://www.geeksforgeeks.org/how-to-implement-google-map-inside-fragment-in-android/

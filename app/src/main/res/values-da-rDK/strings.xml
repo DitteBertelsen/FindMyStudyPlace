@@ -32,6 +32,7 @@
     <string name="txtWelcome">Velkommen </string>
     <string name="txtSingleGroup">Enmands og gruppe</string>
     <string name="txtGroup">Gruppe</string>
+    <string name="errorLoadingStudyPlaces">Der skete en fejl under loading af studiepladser...</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     //Share location:

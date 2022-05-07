@@ -1,4 +1,4 @@
-package dk.au.mad22spring.appproject.group7.Fragments;
+package dk.au.mad22spring.appproject.group7.viewModels;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
@@ -69,6 +69,10 @@ public class StudyPlaceListViewModel extends ViewModel {
 
     public void onUserRatingChanged(StudyPlace studyPlace, double newRating) {
         repository.onUserRatingChanged(studyPlace, newRating);
+    }
+
+    public LiveData<Boolean> getIsStudyPlacesLoaded() {
+        return repository.getIsStudyPlacesLoaded();
     }
 
     public void LogOut() {
