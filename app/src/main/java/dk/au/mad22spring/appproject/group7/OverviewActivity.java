@@ -34,29 +34,21 @@ import dk.au.mad22spring.appproject.group7.models.StudyPlace;
 
 public class OverviewActivity extends AppCompatActivity {
 
-    //Setup UI
-    Button btnLogOut;
-    Button btnMap;
-    Button btnList;
-    Button btnShareLocation;
-    Switch swtSingle;
+    //UI widgets:
+    private Button btnLogOut;
+    private Button btnMap;
+    private Button btnList;
+    private Button btnShareLocation;
+    private Switch swtSingle;
 
-    private String userName;
-
-    private LiveData<ArrayList<StudyPlace>> studyPlaces;
-    private StudyPlaceListViewModel studyPlaceListViewModel;
     private Boolean justLoggedIn = false;
     private StudyPlaceListViewModel viewModel;
-
     private ActivityResultLauncher<Intent> shareLocationLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
-
-        Intent intent = getIntent();
-        userName = intent.getStringExtra(Constants.USER_NAME);
 
         viewModel = new ViewModelProvider(this).get(StudyPlaceListViewModel.class);
 
@@ -73,15 +65,16 @@ public class OverviewActivity extends AppCompatActivity {
 
         setUpUI();
 
+        //Start foreground service to listen on new notifications:
         startForegroundService();
 
+        //Only check for new study places when the user just logged in:
         if (!justLoggedIn) {
             justLoggedIn = true;
             viewModel.CheckForNewStudyplaces(this);
         }
     }
 
-    //
     private void startForegroundService() {
         Intent fgIntent = new Intent(this, NotificationService.class);
         startService(fgIntent);
@@ -149,7 +142,5 @@ public class OverviewActivity extends AppCompatActivity {
                 }
             }
         });
-
-        Toast.makeText(this, R.string.txtWelcome + userName, Toast.LENGTH_LONG);
     }
 }

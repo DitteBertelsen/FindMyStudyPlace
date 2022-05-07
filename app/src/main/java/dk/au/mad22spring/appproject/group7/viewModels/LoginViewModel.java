@@ -5,6 +5,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import dk.au.mad22spring.appproject.group7.Repository;
@@ -22,7 +23,7 @@ public class LoginViewModel extends AndroidViewModel {
         return repository.getCurrentUser();
     }
 
-    public MutableLiveData<Boolean> isSignedIn() {
+    public LiveData<Boolean> isSignedIn() {
         return repository.isSignedIn();
     }
     public void SignIn(String email, String password, Activity activity){
@@ -30,7 +31,7 @@ public class LoginViewModel extends AndroidViewModel {
     }
 
     //Returns true if a new user i successfully created
-    public MutableLiveData<Boolean> getUserCreatedResult() {
+    public LiveData<Boolean> getUserCreatedResult() {
         return repository.getUserCreatedResult();
     }
 

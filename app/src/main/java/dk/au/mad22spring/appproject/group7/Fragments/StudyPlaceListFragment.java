@@ -66,7 +66,8 @@ public class StudyPlaceListFragment extends Fragment implements IStudyPlaceClick
         rcvStudyPlaceView.setLayoutManager(layoutMan);
 
         viewModel = new ViewModelProvider(getActivity()).get(StudyPlaceListViewModel.class);
-        viewModel.getStudyPlaces(this).observe(this.getViewLifecycleOwner(), new Observer<List<StudyPlace>>() {
+
+        viewModel.getStudyPlaces().observe(this.getViewLifecycleOwner(), new Observer<List<StudyPlace>>() {
             @Override
             public void onChanged(List<StudyPlace> items) {
                 studyPlaces = items;

@@ -44,14 +44,11 @@ import dk.au.mad22spring.appproject.group7.viewModels.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText edtEmailAddress, edtPassword;
-    Button btnCreateNewUser, btnLogIn;
-    ProgressBar prgbLogin;
-
-    ActivityResultLauncher<Intent> signInLauncher, overviewLauncher;
-
+    private EditText edtEmailAddress, edtPassword;
+    private Button btnCreateNewUser, btnLogIn;
+    private ProgressBar prgbLogin;
+    private ActivityResultLauncher<Intent> signInLauncher, overviewLauncher;
     private Boolean isUserCreated = false;
-
     private LoginViewModel loginViewModel;
 
     @Override
@@ -134,7 +131,6 @@ public class LoginActivity extends AppCompatActivity {
                 edtPassword.setError(null);
                 closeKeyboard();
 
-
                 SignIn();
             }
         });
@@ -189,32 +185,11 @@ public class LoginActivity extends AppCompatActivity {
         else {
             loginViewModel.SignIn(email,password,this);
         }
-
-        //TODO remove this part? (old log in logic)
-        /*List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build());
-
-        signInLauncher.launch(AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .build());
-
-        goToOverview();*/
     }
-
-
 
     private void goToOverview() {
         Intent intent = new Intent(this, OverviewActivity.class);
-
-        String strEmail = loginViewModel.getCurrentUser();
-
-        //Retrive user name:
-        String[] arrayEmail = strEmail.split("@",2);
-        intent.putExtra(Constants.USER_NAME, arrayEmail[0]);
-
         overviewLauncher.launch(intent);
-
     }
 
     //This method is based on: https://www.geeksforgeeks.org/how-to-programmatically-hide-android-soft-keyboard/

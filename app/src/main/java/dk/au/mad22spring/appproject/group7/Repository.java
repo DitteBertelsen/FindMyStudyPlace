@@ -41,24 +41,60 @@ public class Repository {
         firebaseConnection = FirebaseConnection.getInstance();
     }
 
+    //Returns true if a user is signed in:
+    public LiveData<Boolean> isSignedIn() {
+        return firebaseConnection.isSignedIn();
+    }
+
+    //Validates login-information through firebase-connection
+    public void SignIn(String email, String password, Activity activity){
+        firebaseConnection.SignIn(email,password,activity);
+    }
+
+    //Gets the current user through firebase-connection
+    public String getCurrentUser() {
+        return firebaseConnection.getCurrentUser();
+    }
+
+    //Returns true if a new user i successfully created
+    public LiveData<Boolean> getUserCreatedResult() {
+        return firebaseConnection.getUserCreatedResult();
+    }
+
+    //Calls Firebase Connection and tries to create a new user
+    public void createNewUser(String email, String password, Activity activity) {
+        firebaseConnection.createNewUser(email, password, activity);
+    }
+
+    //When the user pushes 'Log out' button:
+    public void LogOut(){
+        firebaseConnection.LogOut();
+    }
+
+    //Gets all study places from realtime-database
+    public LiveData<List<StudyPlace>> getAllStudyPlaces()
+    {
+        return firebaseConnection.getStudyPlacesRealTimeDb();
+    }
+
+    //Check if there has been made changes to the study places in the storage file:
     public void CheckForNewStudyplaces(LifecycleOwner lifecycleOwner){
         cloudStorage.getStudyPlaceListItems().observe(lifecycleOwner, new Observer<ArrayList<StudyPlace>>() {
             @Override
             public void onChanged(ArrayList<StudyPlace> studyPlaces) {
                 storageList = studyPlaces;
 
+                //Only start listening on getStudyPlacesRealTimeDb() when the storage list has returned:
                 firebaseConnection.getStudyPlacesRealTimeDb().observe(lifecycleOwner, new Observer<List<StudyPlace>>() {
                     @Override
                     public void onChanged(List<StudyPlace> studyPlaces) {
                         List<StudyPlace> realtimeList = new ArrayList<>();
-                        if (studyPlaces.size() == 0 ) {
-                            realtimeList = storageList;
 
+                        //Transfer the study places retrieved from db to realtime list:
+                        if (studyPlaces.size() != 0 ) {
+                             realtimeList = studyPlaces;
                         }
-                        if (storageList.size() != 0) {
-                            realtimeList = studyPlaces;
-                            compareStudyplaces(realtimeList);
-                        }
+                        compareStudyplaces(realtimeList);
                     }
                 });
             }
@@ -103,6 +139,8 @@ public class Repository {
             for (StudyPlace storageStudyplace: storageList) {
                 //Find the matching object of storageStudyPlace i realtimeList:
                 StudyPlace realTimeStudyPlace = new StudyPlace();
+
+                //This bool is used to control when to save to db:
                 Boolean studyplaceAttributesHaveChanged = false;
                 int indexInRealtimeList = -1;
 
@@ -151,6 +189,7 @@ public class Repository {
                 }
             }
 
+            //Only save to db if there has been made any changes:
             if (realTimeListHasChanges) {
                 //Save the updated list in db:
                 firebaseConnection.saveStudyPlaceList(realtimeList);
@@ -158,20 +197,19 @@ public class Repository {
         }
     }
 
+    //This method will invoke all observers:
+    public void invokeGetStudyplaces() {
+        firebaseConnection.invokeGetStudyplaces();
+    }
+
     //When the user rating is changed:
     public void onUserRatingChanged(StudyPlace studyPlace, double newRating) {
         firebaseConnection.onStudyPlaceRatingChanged(studyPlace, newRating);
     }
 
-    //Gets all study places from realtime-database
-    public LiveData<List<StudyPlace>> getAllStudyPlaces()
-    {
-        return firebaseConnection.getStudyPlacesRealTimeDb();
-    }
-
     //Gets notification from realtime database when a new notification
     // has been pushed for the given user.
-    public MutableLiveData<NotificationModel> getNotifications()
+    public LiveData<NotificationModel> getNotifications()
     {
         return firebaseConnection.getNotifications();
     }
@@ -181,38 +219,12 @@ public class Repository {
         firebaseConnection.pushNotification(notificationModel, friends);
     }
 
-    //Gets the current user through firebase-connection
-    public String getCurrentUser() {
-        return firebaseConnection.getCurrentUser();
+    //Delete notficifations in db when it is created:
+    public void deleteNotification() {
+        firebaseConnection.deleteNotification();
     }
 
-    //Returns true if a user is signed in:
-    public MutableLiveData<Boolean> isSignedIn() {
-        return firebaseConnection.isSignedIn();
-    }
 
-    //Validates login-information through firebase-connection
-    public void SignIn(String email, String password, Activity activity){
-        firebaseConnection.SignIn(email,password,activity);
-    }
 
-    //Returns true if a new user i successfully created
-    public MutableLiveData<Boolean> getUserCreatedResult() {
-        return firebaseConnection.getUserCreatedResult();
-    }
 
-    //Calls Firebase Connection and tries to create a new user
-    public void createNewUser(String email, String password, Activity activity) {
-        firebaseConnection.createNewUser(email, password, activity);
-    }
-
-    //When the user pushes 'Log out' button:
-    public void LogOut(){
-        firebaseConnection.LogOut();
-    }
-
-    //This method will invoke all observers:
-    public void invokeGetStudyplaces() {
-        firebaseConnection.invokeGetStudyplaces();
-    }
 }

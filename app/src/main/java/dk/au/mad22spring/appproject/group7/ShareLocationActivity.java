@@ -36,9 +36,9 @@ import dk.au.mad22spring.appproject.group7.viewModels.ShareLocationViewModel;
 
 public class ShareLocationActivity extends AppCompatActivity implements LocationListener {
 
-    Button btnBack, btnShareLocation, btnAdd;
-    EditText edtFriendEmail, edtBuilding,edtComment;
-    TextView txtAddedFriends;
+    private Button btnBack, btnShareLocation, btnAdd;
+    private EditText edtFriendEmail, edtBuilding,edtComment;
+    private TextView txtAddedFriends;
     private ShareLocationViewModel slViewModel;
     public static final int PERMISSIONS_REQUEST_LOCATION = 2;
     public Criteria criteria;
@@ -52,13 +52,18 @@ public class ShareLocationActivity extends AppCompatActivity implements Location
         setContentView(R.layout.activity_share_location);
 
         slViewModel = new ViewModelProvider(this).get(ShareLocationViewModel.class);
+
         if (locationManager == null) {
             locationManager =
                     (LocationManager) this.getSystemService(FMSPApplication.LOCATION_SERVICE);
         }
 
         setUpUI();
+
+        //Check permissions for location:
         checkPermissions();
+
+        //Get user location:
         getLocation();
     }
 
@@ -111,9 +116,9 @@ public class ShareLocationActivity extends AppCompatActivity implements Location
                 String email = edtFriendEmail.getText().toString();
                 edtFriendEmail.setText("");
 
-                //TODO Check if email exist in db:
+                //Check if the name exist in db (not implemented in this project)
 
-                //if friend email exist in db:
+                //If friend email exist in db:
                 if (true) {
                     txtAddedFriends.append(email +"\n");
                 }
@@ -123,6 +128,7 @@ public class ShareLocationActivity extends AppCompatActivity implements Location
             }
         });
     }
+
     //Checks location permission
     private void checkPermissions() {
         if (ContextCompat.checkSelfPermission(FMSPApplication.getAppContext(),
@@ -162,13 +168,6 @@ public class ShareLocationActivity extends AppCompatActivity implements Location
         criteria = new Criteria();
         bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         locationManager.requestLocationUpdates(bestProvider, 1000, 0,this);
@@ -210,6 +209,4 @@ public class ShareLocationActivity extends AppCompatActivity implements Location
     public void onProviderDisabled(@NonNull String provider) {
         LocationListener.super.onProviderDisabled(provider);
     }
-
-
 }

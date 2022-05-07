@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -33,25 +34,25 @@ public class NotificationService extends LifecycleService {
    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
        super.onStartCommand(intent, flags, startId);
-       //Creates a notification channel
+
+       //Create a notification channel:
        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
            NotificationChannel channel = new NotificationChannel(Constants.SERVICE_CHANNEL, "Find my study place", NotificationManager.IMPORTANCE_HIGH);
            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
            notificationManager.createNotificationChannel(channel);
        }
 
-       //NotificationModel m = new NotificationModel();
-       //m.setFriendName("Freja");
-
-       //createNotification(m);
-
+       //Observe on notifications for the user in db:
        repository.getNotifications().observe(this, new Observer<NotificationModel>() {
            @Override
            public void onChanged(NotificationModel notification) {
+               //when a notification has been added:
                createNotification(notification);
+
+               //delete the notification in db:
+               repository.deleteNotification();
            }
        });
-
 
        return START_STICKY;
    }
@@ -63,18 +64,23 @@ public class NotificationService extends LifecycleService {
         executorService.submit(new Runnable() {
             @Override
             public void run() {
-                notifyWithLocation(notificationModel);
+                try {
+                    notifyWithLocation(notificationModel);
+                }
+                catch (Exception e) {
+                    Log.e(Constants.TAG_Notification, "Error invoking NotificationService");
+                }
             }
         });
    }
 
     private void notifyWithLocation(NotificationModel notificationObject) {
-        //Todo tilføj lille notofications item
         Notification notification = new NotificationCompat.Builder(this, Constants.SERVICE_CHANNEL)
                 .setContentTitle(notificationObject.getFriendName() + " " + getString(R.string.notificationTitle))
                 .setContentText(getString(R.string.notificationText) + " " + notificationObject.getBuilding())
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(notificationObject.getComment()))
-                //.setSmallIcon(R.drawable.ic_notification_service_24)
+                .setSmallIcon(R.mipmap.ic_launcher_new_round)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .build();
 
         startForeground(Constants.NOTIFICATION_ID, notification);

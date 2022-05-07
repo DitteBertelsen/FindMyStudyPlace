@@ -45,9 +45,9 @@ public class StudyPlaceListViewAdaptor extends RecyclerView.Adapter<StudyPlaceLi
 
     @Override
     public void onBindViewHolder(@NonNull StudyPlaceItemViewHolder holder, int position) {
-        //Todo add image
         final StudyPlace studyPlace = studyPlaces.get(position);
 
+        //Setup UI:
         holder.txtTitle.setText(studyPlace.getTitle());
         String type = studyPlace.getType().toString();
         if(type == "Single")
@@ -69,10 +69,10 @@ public class StudyPlaceListViewAdaptor extends RecyclerView.Adapter<StudyPlaceLi
                 }
             }
         });
+
         Glide.with(holder.imgIcon.getContext())
                 .load(studyPlace.getImage() !=null ? studyPlaces.get(position).getImage() : "https://www.svgrepo.com/download/3404/triangular-flag.svg")
                 .into(holder.imgIcon);
-
     }
 
     @Override

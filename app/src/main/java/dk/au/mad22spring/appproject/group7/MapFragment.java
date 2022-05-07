@@ -88,7 +88,7 @@ public class MapFragment extends Fragment implements LocationListener {
             }
         });
         //Get studyplaces from Viewmodel
-        MFViewModel.getStudyPlaces(this).observe(this.getViewLifecycleOwner(), new Observer<List<StudyPlace>>() {
+        MFViewModel.getStudyPlaces().observe(this.getViewLifecycleOwner(), new Observer<List<StudyPlace>>() {
             @Override
             public void onChanged(List<StudyPlace> studyPlaces) {
                 studyPlaceList = studyPlaces;

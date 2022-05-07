@@ -33,7 +33,7 @@ public class FirebaseConnection {
     private MutableLiveData<Boolean> isUserCreated;
     private MutableLiveData<Boolean> isUserSignedIn;
 
-    //Upset database
+    //Set up database
     private ArrayList<StudyPlace> studyPlaces;
     private MutableLiveData<List<StudyPlace>> mStudyPlaces;
     private MutableLiveData<NotificationModel> mNotificaiton;
@@ -41,8 +41,7 @@ public class FirebaseConnection {
 
     public static FirebaseConnection getInstance()
     {
-        if(instance == null)
-        {
+        if(instance == null) {
             instance = new FirebaseConnection();
         }
         return instance;
@@ -60,23 +59,25 @@ public class FirebaseConnection {
         studyPlaces = new ArrayList<>();
     }
 
+    //Returns the current users email:
     public String getCurrentUser() {
         String userEmail = auth.getCurrentUser().getEmail();
-
-        if (userEmail != "")
-            setupFirebaseListener();
 
         return userEmail;
     }
 
+    //Custome sign in method using email and password:
     public void SignIn(String email, String password, Activity activity){
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+                //When the user information was correct:
                 if (task.isSuccessful()){
                     Log.d(Constants.TAG_MAIN, "onComplete: User signed in");
+                    setupFirebaseListener();
                     isUserSignedIn.postValue(true);
                 }
+                //When the user informations was incorrect:
                 else {
                     Log.d(Constants.TAG_MAIN, "onComplete: Failed to sign user in");
                     isUserSignedIn.postValue(false);
@@ -85,14 +86,16 @@ public class FirebaseConnection {
         });
     }
 
-    public MutableLiveData<Boolean> isSignedIn() {
+    //Returns the signed in result:
+    public LiveData<Boolean> isSignedIn() {
         if (isUserSignedIn == null){
             isUserSignedIn = new MutableLiveData<>();
         }
         return isUserSignedIn;
     }
 
-    public MutableLiveData<Boolean> getUserCreatedResult()
+    //Returns the user creation result:
+    public LiveData<Boolean> getUserCreatedResult()
     {
         if(isUserCreated == null)
         {
@@ -102,6 +105,7 @@ public class FirebaseConnection {
         return isUserCreated;
     }
 
+    //Create a new user with email and password:
     public void createNewUser(String email, String password, Activity activity)
     {
         auth.createUserWithEmailAndPassword(email, password)
@@ -128,11 +132,13 @@ public class FirebaseConnection {
         return mStudyPlaces;
     }
 
+    //This method is used to invoke observers on mStudyPlaces:
     public void invokeGetStudyplaces() {
         mStudyPlaces.postValue(mStudyPlaces.getValue());
     }
 
-    public MutableLiveData<NotificationModel> getNotifications(){
+    //This method is used to return new notifications:
+    public LiveData<NotificationModel> getNotifications(){
         if (mNotificaiton == null) {
             mNotificaiton = new MutableLiveData<>();
         }
@@ -142,15 +148,12 @@ public class FirebaseConnection {
     //Method created based on the Demo2 from lesson 10: WorldMan
     //sets up a Firebase listener for the list of StudyPlaces
     private void setupFirebaseListener() {
-        //TODO vi har ændret userId (getUid) til userName - se om det skaber problemer
         String userEmail = auth.getCurrentUser().getEmail();
         String userName = userEmail.replace(".", "");
-        String userId = auth.getCurrentUser().getUid();
 
-        //DatabaseReference studyPlaceRef = database.getReference("users/" + userId + "/studyplaces");
         DatabaseReference studyPlaceRef = database.getReference("users/" + userName + "/studyplaces");
 
-        //Listener listening for changes in the database
+        //Listener listening for changes in the users study places in the database
         studyPlaceRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -158,6 +161,7 @@ public class FirebaseConnection {
 
                 //Uses the iterator to go through results
                 Iterable<DataSnapshot> snapshots = dataSnapshot.getChildren();
+
                 while(snapshots.iterator().hasNext()) {
                     studyPlaces.add(snapshots.iterator().next().getValue(StudyPlace.class));
                 }
@@ -173,6 +177,8 @@ public class FirebaseConnection {
         });
 
        DatabaseReference notificationRef = database.getReference("users/" + userName + "/notifications");
+
+       //Listner listening for changes in the users notifications:
        notificationRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -190,11 +196,6 @@ public class FirebaseConnection {
                         //Post the last NotificationModel to mutable object:
                         mNotificaiton.postValue(tempNoti);
                     }
-               /* }
-                else {
-                    hasInitialized = true;
-                    return;
-                }*/
             }
 
             @Override
@@ -208,12 +209,12 @@ public class FirebaseConnection {
     public void onStudyPlaceRatingChanged(StudyPlace studyPlace, double newRating){
         studyPlace.setUserRating(newRating);
         try {
-            //Todo id hvis det virker
             String userEmail = auth.getCurrentUser().getEmail();
             String userName = userEmail.replace(".", "");
-            String userId = auth.getCurrentUser().getUid();
 
-            database.getReference("users/" + userName + "/studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);  //update
+            //Update the study place to save the new rating:
+            database.getReference("users/" + userName + "/studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);
+
         } catch (Exception ex) {
             Log.e("DATA", "onStudyPlaceRatingChanged: Error updating user rating", ex);
         }
@@ -222,17 +223,15 @@ public class FirebaseConnection {
     //Method created based on the Demo2 from lesson 10: WorldMan
     public void saveStudyPlaceList(List<StudyPlace> studyPlaceList) {
         try {
-            //Todo id hvis det virker
             String userEmail = auth.getCurrentUser().getEmail();
             String userName = userEmail.replace(".", "");
-            String userId = auth.getCurrentUser().getUid();
 
             DatabaseReference studyRef = database.getReference("users");
 
+            //save all study places in the users database:
             for (StudyPlace studyPlace: studyPlaceList) {
                 studyRef.child(userName).child("studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);
-                //studyRef.child(userId).child("studyplaces").child(""+studyPlace.getId()).setValue(studyPlace);
-                Log.e("DATA", "saveStudyPlaceList: study place added:" + studyPlace.getTitle());
+                Log.d("DATA", "saveStudyPlaceList: study place added:" + studyPlace.getTitle());
             }
 
         } catch (Exception ex) {
@@ -240,15 +239,33 @@ public class FirebaseConnection {
         }
     }
 
-    public void pushNotification(NotificationModel notificationModel, ArrayList<String> friends) {
-
-        notificationModel.setFriendName(auth.getCurrentUser().getEmail());
+    //This method deletes all notifications in the users db to prevent old notifications to be displayed:
+    public void deleteNotification() {
         try {
-            String userId = auth.getCurrentUser().getUid();
+            String userEmail = auth.getCurrentUser().getEmail();
+            String userName = userEmail.replace(".", "");
+
+            DatabaseReference notificationRef = database.getReference("users/" + userName + "/notifications");
+
+            notificationRef.removeValue();
+
+        }
+        catch (Exception ex) {
+            Log.e("DATA", "deleteNotification: Error deleting notification", ex);
+        }
+    }
+
+    //This method is used to save a new notification in the database:
+    public void pushNotification(NotificationModel notificationModel, ArrayList<String> friends) {
+        notificationModel.setFriendName(auth.getCurrentUser().getEmail());
+
+        try {
             DatabaseReference studyRef = database.getReference("users/");
 
-            String key = studyRef.push().getKey(); //push adds new element in list
+            //Add the same unique id to all notifications:
+            String key = studyRef.push().getKey();
 
+            //Add a notification for all friends in the friends array:
             for (String friend : friends) {
                 String f = friend.replace(".","");
 

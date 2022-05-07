@@ -54,53 +54,15 @@ public class CloudStorage {
         if(mStudyPlaceList == null) {
             mStudyPlaceList = new MutableLiveData<>();
             mStudyPlaceList.setValue(new ArrayList<>());
+
+            //Collect study places from file i Firebase Storage:
             sendRequestUsingVolley("https://firebasestorage.googleapis.com/v0/b/findmystudyplace.appspot.com/o/jsonTestStudyPlacesV2.txt?alt=media&token=103e998d-cfab-40e0-8cb2-2279745419f9");
         }
-
-        /*//Todo remove temp. data
-        ArrayList<StudyPlace> temp = new ArrayList<>();
-        StudyPlace tempstudy1 = new StudyPlace();
-        tempstudy1.setTitle("Nygaard, Kælder");
-        tempstudy1.setType(StudyPlaceType.Single);
-        tempstudy1.setUserRating(4.0);
-        tempstudy1.setStudyPlaceLat(56.17186630246226);
-        tempstudy1.setStudyPlaceLong(10.19044975947223);
-
-        StudyPlace tempstudy2 = new StudyPlace();
-        tempstudy2.setTitle("Nygaard, 1. sal");
-        tempstudy2.setType(StudyPlaceType.Group);
-        tempstudy2.setUserRating(9.9);
-        tempstudy2.setStudyPlaceLat(56.17270526308221);
-        tempstudy2.setStudyPlaceLong(10.190984373182822);
-
-        temp.add(tempstudy1);
-        temp.add(tempstudy2);
-        mStudyPlaceList.postValue(temp);
-        */
-
 
         return mStudyPlaceList;
     }
 
-    private void sendRequest(String fileName) {
-        StorageReference studyPlaceRef = storageRef.child(fileName);
-        studyPlaceRef
-                .getStream()
-                .addOnCompleteListener(new OnCompleteListener<StreamDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<StreamDownloadTask.TaskSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(Constants.TAG_Rep, "onReponse" + task.getResult().toString());
-                            parseJson(task.getResult().toString());
-                        }
-                        else {
-                            Log.e(Constants.TAG_Rep, "onErrorResponse: Oh! That did not work..!");
-                        }
-                    }
-                });
-    }
-
-
+    //This mehtod is based on lesson 6, demo
     private void sendRequestUsingVolley(String url) {
         if (queue == null){
             queue = Volley.newRequestQueue(FMSPApplication.getAppContext());
@@ -116,13 +78,15 @@ public class CloudStorage {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(Constants.TAG_Rep, "onErrorResponse: Oh! That did not work..!");
+                Log.e(Constants.TAG_Rep, "onErrorResponse: faild to collect data using volley");
 
             }
         });
+
         queue.add(stringRequest);
     }
 
+    //This method is based on lesson 6, demo:
     private void parseJson(String json) {
         Gson gson = new GsonBuilder().create();
         StudyPlaceList studyPlaceList = gson.fromJson(json, StudyPlaceList.class);
