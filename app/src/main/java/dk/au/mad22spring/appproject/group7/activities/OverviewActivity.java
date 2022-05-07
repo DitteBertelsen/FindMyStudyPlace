@@ -23,7 +23,7 @@ import dk.au.mad22spring.appproject.group7.fragments.MapFragment;
 import dk.au.mad22spring.appproject.group7.fragments.StudyPlaceListFragment;
 import dk.au.mad22spring.appproject.group7.services.NotificationService;
 import dk.au.mad22spring.appproject.group7.R;
-import dk.au.mad22spring.appproject.group7.viewModels.StudyPlaceListViewModel;
+import dk.au.mad22spring.appproject.group7.viewModels.OverviewViewModel;
 
 public class OverviewActivity extends AppCompatActivity {
 
@@ -35,7 +35,7 @@ public class OverviewActivity extends AppCompatActivity {
     private Switch swtSingle;
     private ProgressBar prgbOverview;
 
-    private StudyPlaceListViewModel viewModel;
+    private OverviewViewModel viewModel;
     private ActivityResultLauncher<Intent> shareLocationLauncher;
 
     @Override
@@ -43,7 +43,7 @@ public class OverviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
 
-        viewModel = new ViewModelProvider(this).get(StudyPlaceListViewModel.class);
+        viewModel = new ViewModelProvider(this).get(OverviewViewModel.class);
 
         //Apply default fragment
         getSupportFragmentManager().beginTransaction()
@@ -64,7 +64,7 @@ public class OverviewActivity extends AppCompatActivity {
         //Start foreground service to listen on new notifications:
         startForegroundService();
 
-        viewModel.CheckForNewStudyplaces(this);
+        //viewModel.CheckForNewStudyplaces(this);
 
         viewModel.getIsStudyPlacesLoaded().observe(this, new Observer<Boolean>() {
             @Override

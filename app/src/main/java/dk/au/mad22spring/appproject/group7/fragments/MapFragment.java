@@ -34,13 +34,13 @@ import java.util.List;
 
 import dk.au.mad22spring.appproject.group7.FMSPApplication;
 import dk.au.mad22spring.appproject.group7.R;
-import dk.au.mad22spring.appproject.group7.viewModels.StudyPlaceListViewModel;
+import dk.au.mad22spring.appproject.group7.viewModels.OverviewViewModel;
 import dk.au.mad22spring.appproject.group7.models.StudyPlace;
 
 //ref: https://www.geeksforgeeks.org/how-to-implement-google-map-inside-fragment-in-android/
 public class MapFragment extends Fragment implements LocationListener {
 
-    private StudyPlaceListViewModel MFViewModel;
+    private OverviewViewModel MFViewModel;
     private LocationManager locationManager;
     private List<StudyPlace> studyPlaceList;
     public static final int PERMISSIONS_REQUEST_LOCATION = 1;
@@ -71,7 +71,7 @@ public class MapFragment extends Fragment implements LocationListener {
         checkPermissions();
 
 
-        MFViewModel = new ViewModelProvider(getActivity()).get(StudyPlaceListViewModel.class);
+        MFViewModel = new ViewModelProvider(getActivity()).get(OverviewViewModel.class);
 
         // Async map
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {

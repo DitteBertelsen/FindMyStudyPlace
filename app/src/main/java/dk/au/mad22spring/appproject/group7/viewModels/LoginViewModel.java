@@ -5,6 +5,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -40,4 +41,7 @@ public class LoginViewModel extends AndroidViewModel {
         repository.createNewUser(email, password, activity);
     }
 
+    public void CheckForNewStudyplaces(LifecycleOwner lifecycleOwner) {
+        repository.CheckForNewStudyplaces(lifecycleOwner);
+    }
 }

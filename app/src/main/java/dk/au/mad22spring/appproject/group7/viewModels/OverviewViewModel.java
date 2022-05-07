@@ -12,12 +12,12 @@ import dk.au.mad22spring.appproject.group7.Repository;
 import dk.au.mad22spring.appproject.group7.StudyPlaceType;
 import dk.au.mad22spring.appproject.group7.models.StudyPlace;
 
-public class StudyPlaceListViewModel extends ViewModel {
+public class OverviewViewModel extends ViewModel {
     private Repository repository;
     private StudyPlaceType studyPlaceType = StudyPlaceType.Group;
     private MediatorLiveData<List<StudyPlace>> shownStudyPlace;
 
-    public StudyPlaceListViewModel() {
+    public OverviewViewModel() {
         repository = Repository.getInstance();
     }
 
@@ -47,10 +47,6 @@ public class StudyPlaceListViewModel extends ViewModel {
         });
 
         return shownStudyPlace;
-    }
-
-    public void CheckForNewStudyplaces(LifecycleOwner lifecycleOwner) {
-        repository.CheckForNewStudyplaces(lifecycleOwner);
     }
 
     public void removeGroupPlaces(){

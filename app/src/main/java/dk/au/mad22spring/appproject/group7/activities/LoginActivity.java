@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -34,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> signInLauncher, overviewLauncher;
     private Boolean isUserCreated = false;
     private LoginViewModel loginViewModel;
+    private LifecycleOwner lifecycleOwner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +80,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        lifecycleOwner = this;
+
         loginViewModel.isSignedIn().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isSignedIn) {
                 prgbLogin.setVisibility(View.GONE);
                 if (isSignedIn){
+                    loginViewModel.CheckForNewStudyplaces(lifecycleOwner);
                     goToOverview();
                 }
                 else {

@@ -21,7 +21,7 @@ import dk.au.mad22spring.appproject.group7.adapters.IStudyPlaceClickedListener;
 import dk.au.mad22spring.appproject.group7.adapters.StudyPlaceListViewAdaptor;
 import dk.au.mad22spring.appproject.group7.R;
 import dk.au.mad22spring.appproject.group7.models.StudyPlace;
-import dk.au.mad22spring.appproject.group7.viewModels.StudyPlaceListViewModel;
+import dk.au.mad22spring.appproject.group7.viewModels.OverviewViewModel;
 
 //This class is based on Tracker demo
 public class StudyPlaceListFragment extends Fragment implements IStudyPlaceClickedListener {
@@ -33,7 +33,7 @@ public class StudyPlaceListFragment extends Fragment implements IStudyPlaceClick
 
     //Define other objects
     private List<StudyPlace> studyPlaces;
-    private StudyPlaceListViewModel viewModel;
+    private OverviewViewModel viewModel;
 
     public static StudyPlaceListFragment newInstance() {
         return new StudyPlaceListFragment();
@@ -59,7 +59,7 @@ public class StudyPlaceListFragment extends Fragment implements IStudyPlaceClick
         rcvStudyPlaceView.setAdapter(adapter);
         rcvStudyPlaceView.setLayoutManager(layoutMan);
 
-        viewModel = new ViewModelProvider(getActivity()).get(StudyPlaceListViewModel.class);
+        viewModel = new ViewModelProvider(getActivity()).get(OverviewViewModel.class);
 
         viewModel.getStudyPlaces().observe(this.getViewLifecycleOwner(), new Observer<List<StudyPlace>>() {
             @Override
