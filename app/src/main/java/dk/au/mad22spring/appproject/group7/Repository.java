@@ -28,9 +28,8 @@ public class Repository {
     private ArrayList<StudyPlace> storageList;
 
     //Singleton patten
-    public static Repository getInstance()
-    {
-        if(instance == null){
+    public static Repository getInstance() {
+        if (instance == null) {
             instance = new Repository();
         }
         return instance;
@@ -41,20 +40,29 @@ public class Repository {
         firebaseConnection = FirebaseConnection.getInstance();
     }
 
+//SIGNING IN:
+
     //Returns true if a user is signed in:
     public LiveData<Boolean> isSignedIn() {
         return firebaseConnection.isSignedIn();
     }
 
     //Validates login-information through firebase-connection
-    public void SignIn(String email, String password, Activity activity){
-        firebaseConnection.SignIn(email,password,activity);
+    public void SignIn(String email, String password, Activity activity) {
+        firebaseConnection.SignIn(email, password, activity);
     }
 
     //Gets the current user through firebase-connection
     public String getCurrentUser() {
         return firebaseConnection.getCurrentUser();
     }
+
+    //When the user pushes 'Log out' button:
+    public void LogOut() {
+        firebaseConnection.LogOut();
+    }
+
+//USER CREATION:
 
     //Returns true if a new user i successfully created
     public LiveData<Boolean> getUserCreatedResult() {
@@ -66,19 +74,15 @@ public class Repository {
         firebaseConnection.createNewUser(email, password, activity);
     }
 
-    //When the user pushes 'Log out' button:
-    public void LogOut(){
-        firebaseConnection.LogOut();
-    }
+//STUDY PLACES:
 
     //Gets all study places from realtime-database
-    public LiveData<List<StudyPlace>> getAllStudyPlaces()
-    {
+    public LiveData<List<StudyPlace>> getAllStudyPlaces() {
         return firebaseConnection.getStudyPlacesRealTimeDb();
     }
 
     //Check if there has been made changes to the study places in the storage file:
-    public void CheckForNewStudyplaces(LifecycleOwner lifecycleOwner){
+    public void CheckForNewStudyplaces(LifecycleOwner lifecycleOwner) {
         cloudStorage.getStudyPlaceListItems().observe(lifecycleOwner, new Observer<ArrayList<StudyPlace>>() {
             @Override
             public void onChanged(ArrayList<StudyPlace> studyPlaces) {
@@ -91,8 +95,8 @@ public class Repository {
                         List<StudyPlace> realtimeList = new ArrayList<>();
 
                         //Transfer the study places retrieved from db to realtime list:
-                        if (studyPlaces.size() != 0 ) {
-                             realtimeList = studyPlaces;
+                        if (studyPlaces.size() != 0) {
+                            realtimeList = studyPlaces;
                         }
                         compareStudyplaces(realtimeList);
                     }
@@ -109,7 +113,7 @@ public class Repository {
         //Check that both async calls has returned
         if (storageList.size() != 0) {
             //In case a new study place has been added to the storage list:
-            for (StudyPlace studyplace: storageList) {
+            for (StudyPlace studyplace : storageList) {
                 //Add the study place if it exists in the storageList but not in db list:
                 if (realtimeList.contains(studyplace.getId())) {
                     realtimeList.add(studyplace);
@@ -121,22 +125,21 @@ public class Repository {
             ArrayList<StudyPlace> itemsToDelete = new ArrayList<>();
 
             //In case a study place has been removed from the storage list:
-            for (StudyPlace studyplace: realtimeList) {
+            for (StudyPlace studyplace : realtimeList) {
                 //Remove the study place if it exists in the db list but not in storageList:
-                if (storageList.contains(studyplace.getId()))
-                {
+                if (storageList.contains(studyplace.getId())) {
                     itemsToDelete.add(studyplace);
                 }
             }
 
             //Deleting the items from realtimeList:
-            for (StudyPlace studyplace: itemsToDelete) {
+            for (StudyPlace studyplace : itemsToDelete) {
                 realtimeList.remove(studyplace);
                 realTimeListHasChanges = true;
             }
 
             //Update all attributes:
-            for (StudyPlace storageStudyplace: storageList) {
+            for (StudyPlace storageStudyplace : storageList) {
                 //Find the matching object of storageStudyPlace i realtimeList:
                 StudyPlace realTimeStudyPlace = new StudyPlace();
 
@@ -144,7 +147,7 @@ public class Repository {
                 Boolean studyplaceAttributesHaveChanged = false;
                 int indexInRealtimeList = -1;
 
-                for (StudyPlace studyPlace: realtimeList) {
+                for (StudyPlace studyPlace : realtimeList) {
                     if (storageStudyplace.getId() == studyPlace.getId()) {
                         realTimeStudyPlace = studyPlace;
                         indexInRealtimeList = realtimeList.indexOf(studyPlace);
@@ -176,7 +179,7 @@ public class Repository {
                             realTimeListHasChanges = true;
                             studyplaceAttributesHaveChanged = true;
                         }
-                        if(realTimeStudyPlace.getProperties() != storageStudyplace.getProperties()) {
+                        if (realTimeStudyPlace.getProperties() != storageStudyplace.getProperties()) {
                             realTimeStudyPlace.setProperties(storageStudyplace.getProperties());
                             realTimeListHasChanges = true;
                             studyplaceAttributesHaveChanged = true;
@@ -207,10 +210,11 @@ public class Repository {
         firebaseConnection.onStudyPlaceRatingChanged(studyPlace, newRating);
     }
 
+//NOTIFICATIONS:
+
     //Gets notification from realtime database when a new notification
     // has been pushed for the given user.
-    public LiveData<NotificationModel> getNotifications()
-    {
+    public LiveData<NotificationModel> getNotifications() {
         return firebaseConnection.getNotifications();
     }
 
@@ -224,7 +228,7 @@ public class Repository {
         firebaseConnection.deleteNotification();
     }
 
-
-
-
+    public LiveData<Boolean> getNotificationPushResult() {
+        return firebaseConnection.getNotificationPushResult();
+    }
 }

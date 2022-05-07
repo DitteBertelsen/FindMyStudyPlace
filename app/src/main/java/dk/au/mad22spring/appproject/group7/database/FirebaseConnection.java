@@ -32,12 +32,12 @@ public class FirebaseConnection {
 
     private MutableLiveData<Boolean> isUserCreated;
     private MutableLiveData<Boolean> isUserSignedIn;
+    private MutableLiveData<Boolean> isNotificationsAdded;
 
     //Set up database
     private ArrayList<StudyPlace> studyPlaces;
     private MutableLiveData<List<StudyPlace>> mStudyPlaces;
     private MutableLiveData<NotificationModel> mNotificaiton;
-    private Boolean hasInitialized = false;
 
     public static FirebaseConnection getInstance()
     {
@@ -46,7 +46,6 @@ public class FirebaseConnection {
         }
         return instance;
     }
-
 
     public FirebaseConnection() {
         if(auth == null) {
@@ -65,6 +64,8 @@ public class FirebaseConnection {
 
         return userEmail;
     }
+
+//SIGNING IN:
 
     //Custome sign in method using email and password:
     public void SignIn(String email, String password, Activity activity){
@@ -93,6 +94,8 @@ public class FirebaseConnection {
         }
         return isUserSignedIn;
     }
+
+//USER CREATION:
 
     //Returns the user creation result:
     public LiveData<Boolean> getUserCreatedResult()
@@ -123,27 +126,7 @@ public class FirebaseConnection {
                 });
     }
 
-    //MutableLiveData for activities to observe for updates in realtime database
-    public LiveData<List<StudyPlace>> getStudyPlacesRealTimeDb() {
-        if(mStudyPlaces == null) {
-            mStudyPlaces = new MutableLiveData<>(new ArrayList());
-        }
-
-        return mStudyPlaces;
-    }
-
-    //This method is used to invoke observers on mStudyPlaces:
-    public void invokeGetStudyplaces() {
-        mStudyPlaces.postValue(mStudyPlaces.getValue());
-    }
-
-    //This method is used to return new notifications:
-    public LiveData<NotificationModel> getNotifications(){
-        if (mNotificaiton == null) {
-            mNotificaiton = new MutableLiveData<>();
-        }
-        return  mNotificaiton;
-    }
+//FIREBASE CONFIGURATION:
 
     //Method created based on the Demo2 from lesson 10: WorldMan
     //sets up a Firebase listener for the list of StudyPlaces
@@ -205,6 +188,30 @@ public class FirebaseConnection {
         });
     }
 
+//STUDY PLACES:
+
+    //MutableLiveData for activities to observe for updates in realtime database
+    public LiveData<List<StudyPlace>> getStudyPlacesRealTimeDb() {
+        if(mStudyPlaces == null) {
+            mStudyPlaces = new MutableLiveData<>(new ArrayList());
+        }
+
+        return mStudyPlaces;
+    }
+
+    //This method is used to invoke observers on mStudyPlaces:
+    public void invokeGetStudyplaces() {
+        mStudyPlaces.postValue(mStudyPlaces.getValue());
+    }
+
+    //This method is used to return new notifications:
+    public LiveData<NotificationModel> getNotifications(){
+        if (mNotificaiton == null) {
+            mNotificaiton = new MutableLiveData<>();
+        }
+        return  mNotificaiton;
+    }
+
     //Method created based on the Demo2 from lesson 10: WorldMan
     public void onStudyPlaceRatingChanged(StudyPlace studyPlace, double newRating){
         studyPlace.setUserRating(newRating);
@@ -238,6 +245,7 @@ public class FirebaseConnection {
             Log.e("DATA", "saveStudyPlaceList: Error saving user study places", ex);
         }
     }
+//NOTIFICATION:
 
     //This method deletes all notifications in the users db to prevent old notifications to be displayed:
     public void deleteNotification() {
@@ -273,9 +281,20 @@ public class FirebaseConnection {
                 Log.e("DATA", "saveNotification: study place added:" + notificationModel.getFriendName());
             }
 
+            isNotificationsAdded.postValue(true);
+
         } catch (Exception ex) {
             Log.e("DATA", "saveStudyPlaceList: Error saving user study places", ex);
+            isNotificationsAdded.postValue(false);
         }
+    }
+
+    public LiveData<Boolean> getNotificationPushResult() {
+        if (isNotificationsAdded == null) {
+            isNotificationsAdded = new MutableLiveData<>();
+        }
+
+        return  isNotificationsAdded;
     }
 
     public void LogOut(){

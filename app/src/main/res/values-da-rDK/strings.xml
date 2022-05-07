@@ -18,7 +18,7 @@
     <string name="errorInvalidPw">Adgangskode skal indholde 8 karakterer</string>
     <string name="userCreated">Bruger tilføjet</string>
     <string name="errorUserCreatation">Opret bruger afvist</string>
-    <string name="errorUserSignIn">Forker e-mail og/eller password</string>
+    <string name="errorUserSignIn">Forkert e-mail og/eller password</string>
 
     //Overview:
     <string name="logOut">Log ud</string>
@@ -30,7 +30,8 @@
     <string name="sortBy">Sorter</string>
     <string name="shareLocation">Del lokation</string>
     <string name="txtWelcome">Velkommen </string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="txtSingleGroup">Enmands og gruppe</string>
+    <string name="txtGroup">Gruppe</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     //Share location:
@@ -47,6 +48,8 @@
     <string name="ratbarRating">Bedømmelsesskala</string>
     <string name="AddBuilding">Tilføj bygning:</string>
     <string name="Building">Bygning</string>
+    <string name="errorNoFrieds">Tilføj venner først</string>
+    <string name="errorPushingNotification">Fejl under deling af lokation...</string>
 
     //Notofication:
     <string name="notificationTitle">har delt din lokation med dig!</string>

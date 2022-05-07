@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
@@ -17,6 +18,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +41,7 @@ public class ShareLocationActivity extends AppCompatActivity implements Location
     private Button btnBack, btnShareLocation, btnAdd;
     private EditText edtFriendEmail, edtBuilding,edtComment;
     private TextView txtAddedFriends;
+    private ProgressBar prgbShareLoca;
     private ShareLocationViewModel slViewModel;
     public static final int PERMISSIONS_REQUEST_LOCATION = 2;
     public Criteria criteria;
@@ -54,8 +57,7 @@ public class ShareLocationActivity extends AppCompatActivity implements Location
         slViewModel = new ViewModelProvider(this).get(ShareLocationViewModel.class);
 
         if (locationManager == null) {
-            locationManager =
-                    (LocationManager) this.getSystemService(FMSPApplication.LOCATION_SERVICE);
+            locationManager = (LocationManager) this.getSystemService(FMSPApplication.LOCATION_SERVICE);
         }
 
         setUpUI();
@@ -65,6 +67,19 @@ public class ShareLocationActivity extends AppCompatActivity implements Location
 
         //Get user location:
         getLocation();
+
+        slViewModel.getNotificationPushResult().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean result) {
+                prgbShareLoca.setVisibility(View.GONE);
+                if (result) {
+                    setResult(RESULT_OK);
+                    finish();
+                } else {
+
+                }
+            }
+        });
     }
 
     private void setUpUI() {
@@ -73,6 +88,9 @@ public class ShareLocationActivity extends AppCompatActivity implements Location
         edtFriendEmail = findViewById(R.id.edtFriendEmail);
 
         txtAddedFriends = findViewById(R.id.txtAddedFriends);
+
+        prgbShareLoca = findViewById(R.id.prgbShareLoca);
+        prgbShareLoca.setVisibility(View.GONE);
 
         btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +105,18 @@ public class ShareLocationActivity extends AppCompatActivity implements Location
         btnShareLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Validate input:
+                if (txtAddedFriends.getText().toString() == "") {
+                    edtFriendEmail.setError(getString(R.string.errorNoFrieds));
+                    prgbShareLoca.setVisibility(View.GONE);
+                    return;
+                }
+
+                prgbShareLoca.setVisibility(View.VISIBLE);
+                edtFriendEmail.setError(null);
+
                 String[] tempfriends = txtAddedFriends.getText().toString().split("\n");
+
                 ArrayList<String> friends = new ArrayList<>();
 
                 //Convert from String[] to ArrayList<String>:
@@ -103,9 +132,6 @@ public class ShareLocationActivity extends AppCompatActivity implements Location
                 notificationModel.setComment(edtComment.getText().toString());
 
                 slViewModel.pushNotification(notificationModel, friends);
-
-                setResult(RESULT_OK);
-                finish();
             }
         });
 
@@ -116,14 +142,19 @@ public class ShareLocationActivity extends AppCompatActivity implements Location
                 String email = edtFriendEmail.getText().toString();
                 edtFriendEmail.setText("");
 
-                //Check if the name exist in db (not implemented in this project)
-
-                //If friend email exist in db:
-                if (true) {
-                    txtAddedFriends.append(email +"\n");
+                //Validate input:
+                if(email == null || email.length()<1 || !email.contains("@")) {
+                    edtFriendEmail.setError(getString(R.string.errorInvalidEmail));
                 }
                 else {
-                    Toast.makeText(FMSPApplication.getAppContext(), R.string.txtFriendDoesNotExist, Toast.LENGTH_SHORT);
+                    //Check if the name exist in db (not implemented in this project)
+
+                    //If friend email exist in db:
+                    if (true) {
+                        txtAddedFriends.append(email + "\n");
+                    } else {
+                        Toast.makeText(FMSPApplication.getAppContext(), R.string.txtFriendDoesNotExist, Toast.LENGTH_SHORT);
+                    }
                 }
             }
         });

@@ -48,8 +48,10 @@
     <string name="ratbarRating">RatingBar</string>
     <string name="AddBuilding">Add Building:</string>
     <string name="Building">Building</string>
+    <string name="errorNoFrieds">Please add some friends first</string>
+    <string name="errorPushingNotification">Erorr while sharing location...</string>
 
-    //Notofication:
+    //Notification:
     <string name="notificationTitle">has shared their location with you!</string>
     <string name="notificationText">Building:</string>
 

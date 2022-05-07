@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".ShareLocationActivity">
 
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="4dp"
+        android:fontFamily="@font/au_passata_bold"
+        android:text="@string/Add"
+        app:layout_constraintBottom_toBottomOf="@+id/edtFriendEmail"
+        app:layout_constraintStart_toEndOf="@+id/edtFriendEmail" />
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -35,17 +46,6 @@
         android:text="@string/Back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btnAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginBottom="4dp"
-        android:fontFamily="@font/au_passata_bold"
-        android:text="@string/Add"
-        app:layout_constraintBottom_toBottomOf="@+id/edtFriendEmail"
-        app:layout_constraintStart_toEndOf="@+id/edtFriendEmail" />
 
     <EditText
         android:id="@+id/edtFriendEmail"
@@ -157,4 +157,18 @@
         android:text="@string/AddBuilding"
         app:layout_constraintStart_toEndOf="@+id/btnAdd"
         app:layout_constraintTop_toTopOf="@+id/textView3" />
+
+    <ProgressBar
+        android:id="@+id/prgbShareLoca"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="208dp"
+        android:layout_height="270dp"
+        android:indeterminateTint="@color/au_secondary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.321" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

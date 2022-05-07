@@ -1,5 +1,7 @@
 package dk.au.mad22spring.appproject.group7;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -57,9 +59,12 @@ public class OverviewActivity extends AppCompatActivity {
                 .replace(R.id.fragList, StudyPlaceListFragment.newInstance())
                 .commitNow();
 
-        shareLocationLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if(result.getResultCode() == RESULT_OK){
-                Toast.makeText(this, R.string.txtSharedLocation, Toast.LENGTH_SHORT).show();
+        shareLocationLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result){
+                if (result.getResultCode() == RESULT_OK) {
+                    Toast.makeText(FMSPApplication.getAppContext(), R.string.txtSharedLocation, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

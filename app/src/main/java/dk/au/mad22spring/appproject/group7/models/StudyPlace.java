@@ -29,9 +29,6 @@ public class StudyPlace {
     @Expose
     private double StudyPlaceLong;
 
-    //TODO Find ud af hvordan vi får hentet billder og hvor de skal ligge
-    //private int picture
-
     @SerializedName("Type")
     @Expose
     private StudyPlaceType Type;
