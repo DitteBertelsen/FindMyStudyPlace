@@ -12,10 +12,10 @@
         android:layout_width="208dp"
         android:layout_height="270dp"
         android:indeterminateTint="@color/au_secondary"
-        app:layout_constraintBottom_toTopOf="@+id/btnShareLocation"
+        app:layout_constraintBottom_toTopOf="@+id/guideline7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline7" />
+        app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
     <TextView
         android:id="@+id/textView2"
@@ -27,8 +27,7 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnBack" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline5"
@@ -51,16 +50,18 @@
 
     <EditText
         android:id="@+id/edtFriendEmail"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
         android:ems="10"
         android:fontFamily="@font/au_passata_rg"
         android:hint="@string/FriendsEmail"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:textSize="34sp"
+        app:layout_constraintEnd_toStartOf="@+id/btnAdd"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -68,12 +69,12 @@
         android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="44dp"
         android:fontFamily="@font/au_passata_bold"
         android:text="@string/Add"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="@+id/edtFriendEmail"
-        app:layout_constraintStart_toEndOf="@+id/edtFriendEmail" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/textView3"
@@ -123,7 +124,7 @@
     <EditText
         android:id="@+id/edtComment"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:ems="10"
         android:fontFamily="@font/au_passata_rg"
@@ -140,14 +141,14 @@
         android:id="@+id/btnShareLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="44dp"
         android:fontFamily="@font/au_passata_bold"
         android:text="@string/ShareLocation"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline7" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline7"
