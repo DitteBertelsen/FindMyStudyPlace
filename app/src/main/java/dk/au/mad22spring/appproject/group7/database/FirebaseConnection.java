@@ -303,6 +303,7 @@ public class FirebaseConnection {
         if (isNotificationsAdded == null) {
             isNotificationsAdded = new MutableLiveData<>();
         }
+        isNotificationsAdded.setValue(false);
 
         return  isNotificationsAdded;
     }
